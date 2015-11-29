@@ -1,34 +1,30 @@
 package dao;
 
-import entity.OptionalCourse;
+import entity.Lecturer;
 
 import java.sql.*;
 
 /**
- * Created by DiZi on 25.11.2015.
+ * Created by DiZi on 29.11.2015.
  */
-public class CourseDao {
+public class LecturerDao {
+    public static final String CREATE_LECTURER = "INSERT INTO LECTURER (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
 
-    public static final String CREATE_COURSE = "INSERT INTO COURSE (ID, NAME, COLUMN_3) VALUES (DEFAULT, ?, ?)";
-
-    public OptionalCourse create (OptionalCourse course){
-        //TO DO
-        // Вынести конекшн
-        // Должен быть отдельный класс
+    public Lecturer create (Lecturer lecturer){
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(CREATE_COURSE);
-            preparedStatement.setString(1, course.getName());
-            preparedStatement.setString(2, course.getCourseDescription());
+            preparedStatement = connection.prepareStatement(CREATE_LECTURER);
+            preparedStatement.setString(1, lecturer.getName());
+            preparedStatement.setString(2, lecturer.getSurname());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             long id = resultSet.getLong(1);
-            course.setId(id);
+            lecturer.setId(id);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -37,7 +33,7 @@ public class CourseDao {
             } catch (Exception ignored) {
             }
         }
-        return course;
+        return lecturer;
     }
 
 }

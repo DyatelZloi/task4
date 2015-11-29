@@ -1,17 +1,17 @@
 package dao;
 
 import entity.OptionalCourse;
+import entity.Student;
 
 import java.sql.*;
 
 /**
- * Created by DiZi on 25.11.2015.
+ * Created by DiZi on 29.11.2015.
  */
-public class CourseDao {
+public class StudentDao {
+    public static final String CREATE_STUDENT = "INSERT INTO STUDENT (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
 
-    public static final String CREATE_COURSE = "INSERT INTO COURSE (ID, NAME, COLUMN_3) VALUES (DEFAULT, ?, ?)";
-
-    public OptionalCourse create (OptionalCourse course){
+    public Student create (Student student){
         //TO DO
         // Вынести конекшн
         // Должен быть отдельный класс
@@ -21,14 +21,14 @@ public class CourseDao {
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(CREATE_COURSE);
-            preparedStatement.setString(1, course.getName());
-            preparedStatement.setString(2, course.getCourseDescription());
+            preparedStatement = connection.prepareStatement(CREATE_STUDENT);
+            preparedStatement.setString(1, student.getName());
+            preparedStatement.setString(2, student.getSurname());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             long id = resultSet.getLong(1);
-            course.setId(id);
+            student.setId(id);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -37,7 +37,6 @@ public class CourseDao {
             } catch (Exception ignored) {
             }
         }
-        return course;
+        return student;
     }
-
 }
