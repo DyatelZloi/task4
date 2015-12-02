@@ -6,7 +6,7 @@ import java.sql.Connection;
  * Created by DiZi on 29.11.2015.
  */
 public class ConnectionPool {
-
+    //TO DO Сделать конекшн пулл
     /**
      *
      */
@@ -49,5 +49,21 @@ public class ConnectionPool {
         this.url = url;
         this.user = user;
         this.password = password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

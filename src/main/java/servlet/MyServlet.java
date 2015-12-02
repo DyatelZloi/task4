@@ -1,5 +1,6 @@
 package servlet;
 
+import action.Context;
 import dao.CourseDao;
 import dao.LecturerDao;
 import dao.ParticipantListDao;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by DiZi on 24.11.2015.
@@ -30,25 +33,23 @@ public class MyServlet extends HttpServlet {
     public static final String COURSE_ID = "id-course";
     public static final String SCORE = "score";
     public static final String SHORT_COMMENT = "short-comment";
-
     private static final String LECTURER_ID = "lecturer-id";
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String actionName = request.getParameter(ACTION_PARAMETER_NAME);
         String name;
         String surname;
         //TO DO избавиться от свича
+
+        Context context = new Context();
+        try {
+            context.setStrategy("create-course");
+        } catch (IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
+        context.executeStrategy(request,response);
+
         switch(actionName){
             case "create-course":
                 name = request.getParameter(NAME_PARAMETER_NAME);
@@ -70,7 +71,7 @@ public class MyServlet extends HttpServlet {
                 studentDao.create(student);
                 response.sendRedirect("/student-created.jsp");
                 break;
-            case "lecturer":
+            case "create-lecturer":
                 name = request.getParameter(NAME_PARAMETER_NAME);
                 surname = request.getParameter(SURNAME_PARAMETER_NAME);
                 Lecturer lecturer = new Lecturer();
@@ -80,7 +81,7 @@ public class MyServlet extends HttpServlet {
                 lecturerDao.create(lecturer);
                 response.sendRedirect("/lecturer-created.jsp");
                 break;
-            case "participiant-list":
+            case "participiant-list-create":
                 String idStudent = request.getParameter(STUDENT_ID);
                 String idCourse = request.getParameter(COURSE_ID);
                 String score = request.getParameter(SCORE);

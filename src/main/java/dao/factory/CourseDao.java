@@ -1,15 +1,13 @@
-package dao;
+package dao.factory;
 
 import entity.OptionalCourse;
 
 import java.sql.*;
 
 /**
- * Created by DiZi on 25.11.2015.
+ * Created by DiZi on 01.12.2015.
  */
-public class CourseDao {
-
-    public static final String CREATE_COURSE = "INSERT INTO COURSE (ID, NAME, COURSEDESCRIPTION) VALUES (DEFAULT, ?, ?)";
+class CourseDao extends DaoFactory {     public static final String CREATE_COURSE = "INSERT INTO COURSE (ID, NAME, COLUMN_3) VALUES (DEFAULT, ?, ?)";
 
     public OptionalCourse create (OptionalCourse course){
         //TO DO
@@ -39,5 +37,4 @@ public class CourseDao {
         }
         return course;
     }
-
 }

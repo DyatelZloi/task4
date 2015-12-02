@@ -18,8 +18,7 @@
     <body>
         ${textA}
         ${textB}
-        <button type="button" class="btn btn-primary">Primary</button>
-        <div class="bg-primary">
+        <div class="btn btn-primary">
             <a class="btn btn-success" href="create-course.jsp">Create course</a>
         </div>
         <div>
