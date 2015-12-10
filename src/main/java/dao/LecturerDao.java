@@ -1,6 +1,8 @@
 package dao;
 
 import entity.Lecturer;
+import entity.OptionalCourse;
+import entity.ParticipantList;
 
 import java.sql.*;
 
@@ -9,6 +11,12 @@ import java.sql.*;
  */
 public class LecturerDao {
     public static final String CREATE_LECTURER = "INSERT INTO LECTURER (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
+
+    public static final String FIND_LECTURER = "SELECT FROM LECTURER WHERE ID = (?)";
+
+    public static final String DELETE_LECTURER = "DELETE FROM LECTURER WHERE ID = (?)";
+
+    public static final  String UPDATE_LECTURER = "UPDATE FROM LECTURER WHERE ID = (?)";
 
     public Lecturer create (Lecturer lecturer){
         Connection connection = null;
@@ -34,6 +42,38 @@ public class LecturerDao {
             }
         }
         return lecturer;
+    }
+
+    public  boolean delete(long id){
+        Connection connection = null;
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        try {
+            Class.forName("org.h2.Driver");
+            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
+            preparedStatement = connection.prepareStatement(DELETE_LECTURER);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
+
+    public Lecturer find (long id){
+        Connection connection = null;
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        try {
+            Class.forName("org.h2.Driver");
+            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
+            preparedStatement = connection.prepareStatement(FIND_LECTURER);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

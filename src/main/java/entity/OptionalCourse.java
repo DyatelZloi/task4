@@ -7,7 +7,7 @@ public class OptionalCourse {
 
     private long id;
     private String name;
-    private Lecturer lecturer;
+    private long lecturer;
     private String courseDescription;
 
     public String getCourseDescription() {
@@ -34,11 +34,21 @@ public class OptionalCourse {
         this.name = name;
     }
 
-    public Lecturer getLecturer() {
+    public long getLecturer() {
         return lecturer;
     }
 
-    public void setLecturer(Lecturer lecturer) {
+    public void setLecturer(long lecturer) {
         this.lecturer = lecturer;
+    }
+
+    @Override
+    public String toString() {
+        return "OptionalCourse{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lecturer=" + lecturer +
+                ", courseDescription='" + courseDescription + '\'' +
+                '}';
     }
 }

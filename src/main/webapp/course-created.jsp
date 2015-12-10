@@ -1,3 +1,5 @@
+<%--@elvariable id="textA" type="Servlet"--%>
+<%--@elvariable id="textB" type="Servlet"--%>
 <%--
   Created by IntelliJ IDEA.
   User: DiZi
@@ -11,6 +13,12 @@
     <title>Title</title>
 </head>
 <body>
+    <form action="${pageContext.request.contextPath}/servlet" method="post">
+        <input type="hidden" name="action" value="course-created">
+        <input type="text" name="id" id="title" placeholder="id">
+        <button type="submit">Find course</button>
+    </form>
+    <p>${textA}</p>
     <p>Course created</p>
 </body>
 </html>

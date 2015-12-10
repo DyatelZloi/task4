@@ -11,27 +11,25 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 /**
- * Created by DiZi on 02.12.2015.
+ * Created by DiZi on 10.12.2015.
  */
-public class ConcreteStrategyAdd implements Strategy {
+public class UpdateCourse implements Strategy {
 
     public static final String NAME_PARAMETER_NAME = "name";
     public static final String COURSE_DESCRIPTION_PARAMETER_NAME = "course-description";
     public static  final int textA = 0;
+    public static final String ID = "id";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Called ConcreteStrategyAdd's execute()");
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String courseDescription = request.getParameter(COURSE_DESCRIPTION_PARAMETER_NAME);
+        int id = Integer.parseInt(request.getParameter(ID));
         OptionalCourse course = new OptionalCourse();
         course.setName(name);
         course.setCourseDescription(courseDescription);
         CourseDao courseDao = new CourseDao();
-        courseDao.create(course);
-        request.setAttribute("textA", textA);
-        ResourceBundle bundle = ResourceBundle.getBundle("words");
-        request.setAttribute("bundle", bundle);
+        courseDao.update(course, id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);
         try {
