@@ -12,11 +12,11 @@ import java.sql.*;
 public class LecturerDao {
     public static final String CREATE_LECTURER = "INSERT INTO LECTURER (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
 
-    public static final String FIND_LECTURER = "SELECT FROM LECTURER WHERE ID = (?)";
+    public static final String FIND_LECTURER = "SELECT * FROM LECTURER WHERE ID = (?)";
 
     public static final String DELETE_LECTURER = "DELETE FROM LECTURER WHERE ID = (?)";
 
-    public static final  String UPDATE_LECTURER = "UPDATE FROM LECTURER WHERE ID = (?)";
+    public static final  String UPDATE_LECTURER = "UPDATE LECTURER SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
 
     public Lecturer create (Lecturer lecturer){
         Connection connection = null;
@@ -76,4 +76,6 @@ public class LecturerDao {
         return null;
     }
 
+    public void update(Lecturer lecturer, int id) {
+    }
 }

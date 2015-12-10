@@ -12,11 +12,11 @@ import java.sql.*;
 public class StudentDao {
     public static final String CREATE_STUDENT = "INSERT INTO STUDENT (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
 
-    public static final String FIND_STUDENT = "SELECT FROM STUDENT WHERE ID = (?)";
+    public static final String FIND_STUDENT = "SELECT * FROM STUDENT WHERE ID = (?)";
 
     public static final String DELETE_STUDENT = "DELETE FROM STUDENT WHERE ID = (?)";
 
-    public static final  String UPDATE_STUDENT = "UPDATE FROM STUDENT WHERE ID = (?)";
+    public static final  String UPDATE_STUDENT = "UPDATE STUDENT SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
 
     public Student create (Student student){
         //TO DO
@@ -47,7 +47,7 @@ public class StudentDao {
         return student;
     }
 
-    public Student update (Student student){
+    public Student update(Student student, int id){
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
@@ -63,13 +63,13 @@ public class StudentDao {
         return student;
     }
 
-    public boolean delete (Student student){
+    public boolean delete (int id){
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         try {
             preparedStatement = connection.prepareStatement(DELETE_STUDENT);
-            preparedStatement.setString(1, student.getName());
+            preparedStatement.setString(1, String.valueOf(id));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

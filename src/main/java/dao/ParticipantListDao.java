@@ -12,11 +12,11 @@ import java.sql.*;
 public class ParticipantListDao {
     public static final String CREATE_PARTICIPANT_LIST = "INSERT INTO StudentRegisteredForCourses (ID, ID_COURSE, ID_STUDENT, SCORE, SHORTCOMMENT) VALUES (DEFAULT, ?, ?, ?, ?)";
 
-    public static final String FIND_PARTICIPANT_LIST = "SELECT FROM StudentRegisteredForCourses WHERE ID = (?)";
+    public static final String FIND_PARTICIPANT_LIST = "SELECT * FROM StudentRegisteredForCourses WHERE ID = (?)";
 
     public static final String DELETE_PARTICIPANT_LIST = "DELETE FROM StudentRegisteredForCourses WHERE ID = (?)";
 
-    public static final  String UPDATE_PARTICIPANT_LIST = "UPDATE FROM StudentRegisteredForCourses WHERE ID = (?)";
+    public static final  String UPDATE_PARTICIPANT_LIST = "UPDATE StudentRegisteredForCourses SET ID_COURSE = (?), ID_STUDENT = (?), SCORE = (?), SHORTCOMMENT = (?) WHERE ID = (?)";
 
     public ParticipantList create (ParticipantList participantList){
         Connection connection = null;
@@ -46,7 +46,7 @@ public class ParticipantListDao {
         return participantList;
     }
 
-    public ParticipantList update (ParticipantList participantList){
+    public ParticipantList update(ParticipantList participantList, int id){
 
         return participantList;
     }
