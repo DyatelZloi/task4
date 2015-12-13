@@ -1,7 +1,6 @@
-package dao;
+package dao.factory;
 
 import entity.Student;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

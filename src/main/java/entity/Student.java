@@ -3,7 +3,7 @@ package entity;
 /**
  * Created by DiZi on 25.11.2015.
  */
-public class Student {
+public class Student extends BaseEntity{
 
     private long id;
     private String name;

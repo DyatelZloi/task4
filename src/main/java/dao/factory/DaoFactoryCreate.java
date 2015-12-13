@@ -1,5 +1,7 @@
 package dao.factory;
 
+import dao.factory.Dao;
+
 /**
  * Created by DiZi on 03.12.2015.
  */
@@ -9,12 +11,14 @@ public class DaoFactoryCreate extends DaoFactory {
     public Dao getDao(Class clazz) {
             Class c = null;
             Dao dao = null;
-            try {
-                c = clazz.getClass();
-                dao = (Dao) c.newInstance();
-            } catch ( InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException("Unable to create/find DAO instance", e);
-            }
-            return dao;
+        try {
+            dao = (Dao) clazz.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return dao;
     }
 }

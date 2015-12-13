@@ -1,6 +1,10 @@
 package action;
 
-import dao.CourseDao;
+
+
+import dao.factory.CourseDao;
+import dao.factory.Dao;
+import dao.factory.DaoFactory;
 import entity.OptionalCourse;
 
 import javax.servlet.RequestDispatcher;
@@ -31,8 +35,9 @@ public class ConcreteStrategyAdd implements Strategy {
         OptionalCourse course = new OptionalCourse();
         course.setName(name);
         course.setCourseDescription(courseDescription);
-        CourseDao courseDao = new CourseDao();
-        courseDao.create(course);
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        Dao dao = daoFactory.getDao(CourseDao.class);
+        dao.create(course);
         request.setAttribute("textA", textA);
         ResourceBundle bundle = ResourceBundle.getBundle("words");
         request.setAttribute("bundle", bundle);

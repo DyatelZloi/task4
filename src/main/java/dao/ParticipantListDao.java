@@ -11,6 +11,9 @@ import java.sql.*;
  * Created by DiZi on 29.11.2015.
  */
 public class ParticipantListDao {
+
+    private static final Logger log = LoggerFactory.getLogger(ParticipantListDao.class);
+
     public static final String CREATE_PARTICIPANT_LIST = "INSERT INTO StudentRegisteredForCourses (ID, ID_COURSE, ID_STUDENT, SCORE, SHORTCOMMENT) VALUES (DEFAULT, ?, ?, ?, ?)";
 
     public static final String FIND_PARTICIPANT_LIST = "SELECT * FROM StudentRegisteredForCourses WHERE ID = (?)";
@@ -67,6 +70,8 @@ public class ParticipantListDao {
         }
         return  false;
     }
+
+    //TO DO сделать джойны, чтобы можно было посмотреть к кому относится.
 
     public ParticipantList find (long id){
         Connection connection = null;

@@ -3,7 +3,7 @@ package entity;
 /**
  * Created by DiZi on 25.11.2015.
  */
-public class OptionalCourse {
+public class OptionalCourse extends BaseEntity{
 
     private long id;
     private String name;

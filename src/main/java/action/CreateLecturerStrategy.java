@@ -1,6 +1,10 @@
 package action;
 
-import dao.LecturerDao;
+
+import dao.factory.CourseDao;
+import dao.factory.Dao;
+import dao.factory.DaoFactory;
+import dao.factory.LecturerDao;
 import entity.Lecturer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,10 +29,12 @@ public class CreateLecturerStrategy implements Strategy {
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String surname = request.getParameter(SURNAME_PARAMETER_NAME);
         Lecturer lecturer = new Lecturer();
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        Dao dao = daoFactory.getDao(LecturerDao.class);
         lecturer.setName(name);
         lecturer.setSurname(surname);
         LecturerDao lecturerDao = new LecturerDao();
-        lecturerDao.create(lecturer);
+        dao.create(lecturer);
         try {
             response.sendRedirect("/lecturer-created.jsp");
         } catch (IOException e) {

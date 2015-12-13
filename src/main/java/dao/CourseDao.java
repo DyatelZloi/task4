@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
  */
 public class CourseDao {
 
+    private static final Logger log = LoggerFactory.getLogger(CourseDao.class);
+
     public static final String CREATE_COURSE = "INSERT INTO COURSE (ID, NAME, COURSEDESCRIPTION) VALUES (DEFAULT, ?, ?)";
 
     public static final String FIND_COURSE = "SELECT * FROM COURSE WHERE ID = (?)";
@@ -26,7 +28,7 @@ public class CourseDao {
      public OptionalCourse optionalCourse;
 
     public OptionalCourse create (OptionalCourse course) throws DaoException {
-        //TO DO
+        //TODO
         // Вынести конекшн
         // Должен быть отдельный класс
         ConnectionPool pool = null;

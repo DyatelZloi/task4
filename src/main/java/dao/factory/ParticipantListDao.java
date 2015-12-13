@@ -1,7 +1,6 @@
-package dao;
+package dao.factory;
 
-import entity.Lecturer;
-
+import entity.ParticipantList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,32 +9,35 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class LecturerDao {
-    private static final Logger log = LoggerFactory.getLogger(LecturerDao.class);
+public class ParticipantListDao {
 
-    public static final String CREATE_LECTURER = "INSERT INTO LECTURER (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
+    private static final Logger log = LoggerFactory.getLogger(ParticipantListDao.class);
 
-    public static final String FIND_LECTURER = "SELECT * FROM LECTURER WHERE ID = (?)";
+    public static final String CREATE_PARTICIPANT_LIST = "INSERT INTO StudentRegisteredForCourses (ID, ID_COURSE, ID_STUDENT, SCORE, SHORTCOMMENT) VALUES (DEFAULT, ?, ?, ?, ?)";
 
-    public static final String DELETE_LECTURER = "DELETE FROM LECTURER WHERE ID = (?)";
+    public static final String FIND_PARTICIPANT_LIST = "SELECT * FROM StudentRegisteredForCourses WHERE ID = (?)";
 
-    public static final  String UPDATE_LECTURER = "UPDATE LECTURER SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
+    public static final String DELETE_PARTICIPANT_LIST = "DELETE FROM StudentRegisteredForCourses WHERE ID = (?)";
 
-    public Lecturer create (Lecturer lecturer){
+    public static final  String UPDATE_PARTICIPANT_LIST = "UPDATE StudentRegisteredForCourses SET ID_COURSE = (?), ID_STUDENT = (?), SCORE = (?), SHORTCOMMENT = (?) WHERE ID = (?)";
+
+    public ParticipantList create (ParticipantList participantList){
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(CREATE_LECTURER);
-            preparedStatement.setString(1, lecturer.getName());
-            preparedStatement.setString(2, lecturer.getSurname());
+            preparedStatement = connection.prepareStatement(CREATE_PARTICIPANT_LIST);
+            preparedStatement.setString(1, String.valueOf(participantList.getIdCourse()));
+            preparedStatement.setString(2, String.valueOf(participantList.getIdStudent()));
+            preparedStatement.setString(3, String.valueOf(participantList.getScore()));
+            preparedStatement.setString(4, participantList.getShortComment());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             long id = resultSet.getLong(1);
-            lecturer.setId(id);
+            participantList.setId(id);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
@@ -44,7 +46,12 @@ public class LecturerDao {
             } catch (Exception ignored) {
             }
         }
-        return lecturer;
+        return participantList;
+    }
+
+    public ParticipantList update(ParticipantList participantList, int id){
+
+        return participantList;
     }
 
     public  boolean delete(long id){
@@ -54,7 +61,7 @@ public class LecturerDao {
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(DELETE_LECTURER);
+            preparedStatement = connection.prepareStatement(DELETE_PARTICIPANT_LIST);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
@@ -63,22 +70,21 @@ public class LecturerDao {
         return  false;
     }
 
-    public Lecturer find (long id){
+    //TO DO сделать джойны, чтобы можно было посмотреть к кому относится.
+
+    public ParticipantList find (long id){
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         try {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(FIND_LECTURER);
+            preparedStatement = connection.prepareStatement(FIND_PARTICIPANT_LIST);
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public void update(Lecturer lecturer, int id) {
     }
 }

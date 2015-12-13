@@ -1,11 +1,10 @@
-package dao;
+package dao.factory;
 
 import entity.User;
-
-import java.sql.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.*;
 
 /**
  * Created by DiZi on 29.11.2015.

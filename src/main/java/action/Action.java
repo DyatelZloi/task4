@@ -19,7 +19,7 @@ public class Action {
 
     private static final Logger log = LoggerFactory.getLogger(Action.class);
 
-        //TO DO переименовать, имя не подхожящее
+        //TODO переименовать, имя не подхожящее
     private Strategy strategy;
 
     private Map map = new HashMap<String, Strategy>();

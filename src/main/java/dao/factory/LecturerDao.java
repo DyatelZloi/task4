@@ -1,7 +1,6 @@
-package dao;
+package dao.factory;
 
 import entity.Lecturer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +9,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class LecturerDao {
+public class LecturerDao extends Dao<Lecturer>{
     private static final Logger log = LoggerFactory.getLogger(LecturerDao.class);
 
     public static final String CREATE_LECTURER = "INSERT INTO LECTURER (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
@@ -21,6 +20,7 @@ public class LecturerDao {
 
     public static final  String UPDATE_LECTURER = "UPDATE LECTURER SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
 
+    @Override
     public Lecturer create (Lecturer lecturer){
         Connection connection = null;
         PreparedStatement preparedStatement;
@@ -63,7 +63,8 @@ public class LecturerDao {
         return  false;
     }
 
-    public Lecturer find (long id){
+    @Override
+    public Lecturer update(Lecturer lecturer, int id) {
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
@@ -76,9 +77,16 @@ public class LecturerDao {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return lecturer;
     }
 
-    public void update(Lecturer lecturer, int id) {
+    @Override
+    public boolean delete(int i) {
+        return false;
+    }
+
+    @Override
+    public Lecturer find(int i) {
+        return null;
     }
 }
