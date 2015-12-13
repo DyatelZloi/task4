@@ -1,9 +1,11 @@
 package dao;
 
-import entity.Student;
 import entity.User;
 
 import java.sql.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by DiZi on 29.11.2015.

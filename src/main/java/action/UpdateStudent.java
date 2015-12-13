@@ -1,8 +1,6 @@
 package action;
 
-import dao.LecturerDao;
 import dao.StudentDao;
-import entity.Lecturer;
 import entity.Student;
 
 import javax.servlet.RequestDispatcher;
@@ -11,10 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by DiZi on 10.12.2015.
  */
 public class UpdateStudent implements Strategy {
+
+    private static final Logger log = LoggerFactory.getLogger(UpdateStudent.class);
 
     public static final String NAME_PARAMETER_NAME = "name";
     public static final String STUDENT_SURNAME = "surname";

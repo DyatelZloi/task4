@@ -6,14 +6,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.UnknownServiceException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by DiZi on 02.12.2015.
  */
 public class Action {
+
+    private static final Logger log = LoggerFactory.getLogger(Action.class);
+
         //TO DO переименовать, имя не подхожящее
     private Strategy strategy;
 
@@ -22,31 +27,32 @@ public class Action {
     private void any () {
 
         //TO DO переименуй, чтобы было более систематизировано
+        // тут всё что суём на нашей совести, осторожно
 
-        map.put("create-course", ConcreteStrategyAdd.class);
-        map.put("create-lecturer",  CreateLecturerStrategy.class);
-        map.put("create-student", CreateStudentStrategy.class);
-        map.put("participiant-list-create", PatricipiantListCreateStrategy.class);
-        map.put("registration", User.class);
-        map.put("course-created", FindCourse.class);
+        map.put("create-course", new ConcreteStrategyAdd());
+        map.put("create-lecturer", new CreateLecturerStrategy());
+        map.put("create-student", new CreateStudentStrategy());
+        map.put("participiant-list-create", new PatricipiantListCreateStrategy());
+        map.put("registration", new User());
+        map.put("course-created", new FindCourse());
 
-        map.put("update-course", UpdateCourse.class);
-        map.put("update-user", UpdateUser.class);
-        map.put("update-lecturer", UpdateLecturer.class);
-        map.put("update-student", UpdateStudent.class);
-        map.put("update-list", UpdatePatricipiantList.class);
+        map.put("update-course", new UpdateCourse());
+        map.put("update-user", new UpdateUser());
+        map.put("update-lecturer", new UpdateLecturer());
+        map.put("update-student", new UpdateStudent());
+        map.put("update-list", new UpdatePatricipiantList());
 
-        map.put("delete-user", DeleteUser.class);
-        map.put("delete-list", DeletePatricipiantList.class);
-        map.put("delete-student", DeleteStudent.class);
-        map.put("delete-lecturer", DeleteLecturer.class);
-        map.put("course-delete", DeleteCourse.class);
+        map.put("delete-user", new DeleteUser());
+        map.put("delete-list", new DeletePatricipiantList());
+        map.put("delete-student", new DeleteStudent());
+        map.put("delete-lecturer", new DeleteLecturer());
+        map.put("course-delete", new DeleteCourse());
 
-        map.put("find-lecturer", FindLecturer.class);
-        map.put("find-user", FindUser.class);
-        map.put("find-student", FindStudent.class);
-        map.put("find-list", FindPatricipiantList.class);
-        map.put("find-course", FindCourse.class);
+        map.put("find-lecturer", new FindLecturer());
+        map.put("find-user", new FindUser());
+        map.put("find-student", new FindStudent());
+        map.put("find-list", new FindPatricipiantList());
+        map.put("find-course", new FindCourse());
 
     }
 
@@ -55,8 +61,7 @@ public class Action {
     }
 
     public void setStrategy(String actionName) throws IllegalAccessException, InstantiationException {
-        Class e = (Class) map.get(actionName);
-        this.strategy = (Strategy) e.newInstance();
+        this.strategy = (Strategy) map.get(actionName);
     }
 
     public void executeStrategy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

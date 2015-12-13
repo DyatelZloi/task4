@@ -5,6 +5,9 @@ import entity.OptionalCourse;
 
 import java.sql.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by DiZi on 25.11.2015.
  */

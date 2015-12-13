@@ -10,9 +10,14 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @WebListener()
 public class ListenerConnections implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
+
+    private static final Logger log = LoggerFactory.getLogger(ListenerConnections.class);
 
     // Public constructor is required by servlet spec
     public ListenerConnections() {

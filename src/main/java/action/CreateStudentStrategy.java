@@ -7,14 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by DiZi on 02.12.2015.
  */
 public class CreateStudentStrategy implements Strategy {
 
-    public static final String NAME_PARAMETER_NAME = "name";
-    public static  final String SURNAME_PARAMETER_NAME = "surname";
+    private static final Logger log = LoggerFactory.getLogger(CreateStudentStrategy.class);
 
+    public static final String NAME_PARAMETER_NAME = "name";
+
+    public static  final String SURNAME_PARAMETER_NAME = "surname";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

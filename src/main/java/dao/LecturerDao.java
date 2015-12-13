@@ -1,8 +1,9 @@
 package dao;
 
 import entity.Lecturer;
-import entity.OptionalCourse;
-import entity.ParticipantList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 

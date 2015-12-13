@@ -9,10 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by DiZi on 10.12.2015.
  */
 public class UpdatePatricipiantList implements Strategy {
+
+    private static final Logger log = LoggerFactory.getLogger(UpdatePatricipiantList.class);
 
     public static final String ID_COURSE = "id-course";
     public static final String ID_STUDENT = "id-student";

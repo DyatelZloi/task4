@@ -1,4 +1,3 @@
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: DiZi
@@ -21,7 +20,7 @@
         <div class="btn btn-primary">
             <a class="btn btn-success" href="create-course.jsp">Create course</a>
         </div>
-         <c:if test = ${textA>0}>
+         <c:if test = ${textA==null}>
             <div>
                 <a href="create-student.jsp">Create student</a>
                 ${textA}
