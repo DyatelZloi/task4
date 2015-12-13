@@ -9,7 +9,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class StudentDao  extends Dao<Student> {
+public class StudentDao extends GenericDao<Student> {
 
     private static final Logger log = LoggerFactory.getLogger(StudentDao.class);
 

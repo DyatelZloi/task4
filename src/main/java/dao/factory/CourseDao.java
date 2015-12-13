@@ -2,7 +2,6 @@ package dao.factory;
 
 import connection.ConnectionPool;
 import dao.DaoException;
-import entity.BaseEntity;
 import entity.OptionalCourse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 25.11.2015.
  */
-public class CourseDao extends Dao<OptionalCourse>{
+public class CourseDao extends GenericDao<OptionalCourse> {
 
     private static final Logger log = LoggerFactory.getLogger(CourseDao.class);
 

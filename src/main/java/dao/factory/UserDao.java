@@ -1,6 +1,8 @@
 package dao.factory;
 
-import entity.Student;
+import connection.ConnectionPool;
+import dao.DaoException;
+
 import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class UserDao extends Dao<User>{
+public class UserDao extends GenericDao<User> {
 
     private static final Logger log = LoggerFactory.getLogger(UserDao.class);
 
@@ -20,7 +22,9 @@ public class UserDao extends Dao<User>{
 
     public static final String DELETE_USER = "DELETE FROM user WHERE id = (?)";
 
-    public static final  String UPDATE_USER = "UPDATE FROM user WHERE id = (?)";
+    public static final  String UPDATE_USER = "UPDATE USER SET LOGIN = (?), PASSWORD = (?) WHERE ID = (?)";
+
+    public static final String DRIVER_CLASS_NAME = "org.h2.Driver";
 
     @Override
     public User create (User user){
@@ -50,8 +54,36 @@ public class UserDao extends Dao<User>{
     }
 
     @Override
-    public User update(User user, int i) {
-        return null;
+    public User update(User user, int id) {
+        ConnectionPool pool = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        pool = ConnectionPool.getInstance();
+        pool.setDriverClassName(DRIVER_CLASS_NAME);
+        pool.setUserName("GOD");
+        pool.setPassword("GOD");
+        pool.setUrl("jdbc:h2:~/course");
+        pool.setConnectionNumber(4);
+        pool.initConnections();
+        //вынести в инициализаццию конекшена, чтобы не прописывать такое количество методов
+        con = pool.getConnection();
+        // вынести в фабрику использование конекшена
+        try {
+            ps = con.prepareStatement(UPDATE_USER);
+            ps.setString(1, user.getLogin());
+            ps.setString(2, user.getPassword());
+            ps.setInt(3, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException("Ошибка при выполнении запроса",e);
+        } finally {
+            try {
+                con.close();
+            } catch (Exception ignored) {
+            }
+        }
+        return user;
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class ParticipantListDao extends Dao<ParticipantList>{
+public class ParticipantListDao extends GenericDao<ParticipantList> {
 
     private static final Logger log = LoggerFactory.getLogger(ParticipantListDao.class);
 

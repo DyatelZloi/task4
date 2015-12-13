@@ -49,6 +49,9 @@
         <div>
             <a href="find-user.jsp"> Find user </a>
         </div>
+        <div>
+            <a href="update-user.jsp"> Update user</a>
+        </div>
         ${createdcourses}
         ${entity}
     </body>

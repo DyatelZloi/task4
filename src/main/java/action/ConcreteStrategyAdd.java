@@ -3,7 +3,7 @@ package action;
 
 
 import dao.factory.CourseDao;
-import dao.factory.Dao;
+import dao.factory.GenericDao;
 import dao.factory.DaoFactory;
 import entity.OptionalCourse;
 
@@ -36,8 +36,8 @@ public class ConcreteStrategyAdd implements Strategy {
         course.setName(name);
         course.setCourseDescription(courseDescription);
         DaoFactory daoFactory = DaoFactory.getInstance();
-        Dao dao = daoFactory.getDao(CourseDao.class);
-        dao.create(course);
+        GenericDao genericDao = daoFactory.getDao(CourseDao.class);
+        genericDao.create(course);
         request.setAttribute("textA", textA);
         ResourceBundle bundle = ResourceBundle.getBundle("words");
         request.setAttribute("bundle", bundle);

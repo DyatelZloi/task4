@@ -1,7 +1,5 @@
 package action.factory;
 
-import dao.factory.Dao;
-
 /**
  * Created by DiZi on 06.12.2015.
  */

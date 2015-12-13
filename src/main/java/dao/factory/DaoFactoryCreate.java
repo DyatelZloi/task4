@@ -6,13 +6,13 @@ package dao.factory;
 public class DaoFactoryCreate extends DaoFactory {
 
     @Override
-    public Dao getDao(Class clazz) {
-        Dao dao = null;
+    public GenericDao getDao(Class clazz) {
+        GenericDao genericDao = null;
         try {
-            dao = (Dao) clazz.newInstance();
+            genericDao = (GenericDao) clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        return dao;
+        return genericDao;
     }
 }

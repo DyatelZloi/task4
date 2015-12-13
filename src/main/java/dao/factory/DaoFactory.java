@@ -7,6 +7,8 @@ package dao.factory;
  */
 public abstract class DaoFactory {
 
+    //TODO выпилить обычные дао, доработать factory
+
     private static DaoFactory instance;
 
     public static DaoFactory getInstance() {
@@ -16,5 +18,5 @@ public abstract class DaoFactory {
         return instance;
     }
 
-    public abstract Dao  getDao(Class clazz);
+    public abstract GenericDao getDao(Class clazz);
 }

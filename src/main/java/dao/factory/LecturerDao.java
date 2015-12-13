@@ -9,7 +9,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class LecturerDao extends Dao<Lecturer>{
+public class LecturerDao extends GenericDao<Lecturer> {
     private static final Logger log = LoggerFactory.getLogger(LecturerDao.class);
 
     public static final String CREATE_LECTURER = "INSERT INTO LECTURER (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";

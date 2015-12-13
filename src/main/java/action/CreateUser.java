@@ -2,7 +2,7 @@ package action;
 
 
 
-import dao.factory.Dao;
+import dao.factory.GenericDao;
 import dao.factory.DaoFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +33,8 @@ public class CreateUser implements Strategy {
         user.setLogin(login);
         user.setPassword(password);
         DaoFactory daoFactory = DaoFactory.getInstance();
-        Dao dao = daoFactory.getDao(UserDao.class);
-        dao.create(user);
+        GenericDao genericDao = daoFactory.getDao(UserDao.class);
+        genericDao.create(user);
         try {
             response.sendRedirect("/list-created.jsp");
         } catch (IOException e) {
