@@ -33,7 +33,7 @@ public class Action {
         map.put("create-lecturer", new CreateLecturerStrategy());
         map.put("create-student", new CreateStudentStrategy());
         map.put("participiant-list-create", new PatricipiantListCreateStrategy());
-        map.put("registration", new User());
+        map.put("registration", new CreateUser());
         map.put("course-created", new FindCourse());
 
         map.put("update-course", new UpdateCourse());

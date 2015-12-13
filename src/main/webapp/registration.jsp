@@ -1,11 +1,14 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title></title>
-        <link href="webjars/bootstrap/3.3.6/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript" src="webjars/bootstrap/3.3.6/dist/js/bootstrap.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <title>Create user</title>
     </head>
     <body>
-
+        <form action="${pageContext.request.contextPath}/servlet" method="post">
+            <input type="hidden" name="action" value="registration">
+            <input type="text" name="login" id="login" placeholder="User login">
+            <input type="password" name="password" id="password" placeholder="">
+            <button type="submit">Create user</button>
+        </form>
     </body>
 </html>

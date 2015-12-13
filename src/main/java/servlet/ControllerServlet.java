@@ -21,7 +21,8 @@ public class ControllerServlet extends HttpServlet {
 
     public static final String ACTION_PARAMETER_NAME = "action";
 
-    // TO DO сделать сессии
+    // TODO сделать сессии
+    // TODO логи, всюду должны быть логи!
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String actionName = request.getParameter(ACTION_PARAMETER_NAME);

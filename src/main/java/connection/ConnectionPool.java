@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
  * Created by DiZi on 29.11.2015.
  */
 public class ConnectionPool {
-    //TO DO внести некоторые корректировки
+    //TODO внести некоторые корректировки (переделай)
     public static final ConnectionPool pool = new ConnectionPool();
     private List<PooledConnection> connectionList;
     private String driverClassName;

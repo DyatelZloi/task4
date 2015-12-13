@@ -14,15 +14,38 @@ public class UserDao {
 
     private static final Logger log = LoggerFactory.getLogger(UserDao.class);
 
-    public static  final String FIND_USER = "SELECT FROM USER LOGIN VALUES ?";
+    public static  final String FIND_USER = "SELECT * FROM user WHERE login = (?)";
 
-    public static final String CREATE_USER = "INSERT INTO COURSE (ID, NAME, COURSEDESCRIPTION) VALUES (DEFAULT, ?, ?)";
+    public static final String CREATE_USER = "INSERT INTO user (id, login, password) VALUES (DEFAULT, ?, ?)";
 
-    public static final String DELETE_USER = "DELETE FROM COURSE WHERE ID = (?)";
+    public static final String DELETE_USER = "DELETE FROM user WHERE id = (?)";
 
-    public static final  String UPDATE_USER = "UPDATE FROM COURSE WHERE ID = (?)";
+    public static final  String UPDATE_USER = "UPDATE FROM user WHERE id = (?)";
 
     public User create (User user){
+
+        Connection connection = null;
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+        try {
+            Class.forName("org.h2.Driver");
+            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
+            preparedStatement = connection.prepareStatement(CREATE_USER);
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.executeUpdate();
+            resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            int id = resultSet.getInt(1);
+            user.setId(id);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception ignored) {
+            }
+        }
         return user;
     }
 
@@ -52,7 +75,7 @@ public class UserDao {
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getResultSet();
             resultSet.next();
-            long id = resultSet.getLong(1);
+            int id = resultSet.getInt(1);
             user.setId(id);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

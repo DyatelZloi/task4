@@ -13,7 +13,6 @@ public class DaoFactoryCreate extends DaoFactory {
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
         return dao;
     }
 }

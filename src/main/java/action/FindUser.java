@@ -1,14 +1,13 @@
 package action;
 
-
-import dao.UserDao;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import dao.factory.Dao;
+import dao.factory.DaoFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +23,9 @@ public class FindUser implements Strategy {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter(ID));
-        UserDao userDao = new UserDao();
-        request.setAttribute("entity",userDao.find(id));
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        Dao dao = daoFactory.getDao(dao.factory.UserDao.class);
+        request.setAttribute("entity",dao.find(id));
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
         dispatcher.forward(request, response);
         try {

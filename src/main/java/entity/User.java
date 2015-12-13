@@ -5,7 +5,7 @@ package entity;
  */
 public class User extends BaseEntity{
 
-    long id;
+    int id;
 
     String login;
 
@@ -15,7 +15,7 @@ public class User extends BaseEntity{
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -33,5 +33,13 @@ public class User extends BaseEntity{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
