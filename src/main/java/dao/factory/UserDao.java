@@ -9,7 +9,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class UserDao {
+public class UserDao extends Dao<User>{
 
     private static final Logger log = LoggerFactory.getLogger(UserDao.class);
 
@@ -21,8 +21,24 @@ public class UserDao {
 
     public static final  String UPDATE_USER = "UPDATE FROM COURSE WHERE ID = (?)";
 
+    @Override
     public User create (User user){
         return user;
+    }
+
+    @Override
+    public User update(User object, int i) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(int i) {
+        return false;
+    }
+
+    @Override
+    public User find(int i) {
+        return null;
     }
 
     public User update (long id, User user){
@@ -47,7 +63,7 @@ public class UserDao {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
             preparedStatement = connection.prepareStatement(FIND_USER);
-            preparedStatement.setString(1,user.getLogin());
+            preparedStatement.setString(1, user.getLogin());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getResultSet();
             resultSet.next();

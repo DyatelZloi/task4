@@ -9,7 +9,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class StudentDao {
+public class StudentDao  extends Dao<Student> {
 
     private static final Logger log = LoggerFactory.getLogger(StudentDao.class);
 
@@ -21,6 +21,7 @@ public class StudentDao {
 
     public static final  String UPDATE_STUDENT = "UPDATE STUDENT SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
 
+    @Override
     public Student create (Student student){
         //TO DO
         // Вынести конекшн
@@ -50,6 +51,7 @@ public class StudentDao {
         return student;
     }
 
+    @Override
     public Student update(Student student, int id){
         Connection connection = null;
         PreparedStatement preparedStatement;
@@ -66,6 +68,7 @@ public class StudentDao {
         return student;
     }
 
+    @Override
     public boolean delete (int id){
         Connection connection = null;
         PreparedStatement preparedStatement;
@@ -80,7 +83,8 @@ public class StudentDao {
         return false;
     }
 
-    public Student find (long id){
+    @Override
+    public Student find(int id) {
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
@@ -90,7 +94,7 @@ public class StudentDao {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
             preparedStatement = connection.prepareStatement(FIND_STUDENT);
-            preparedStatement.setLong(1, id);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             preparedStatement.executeUpdate();
             while (rs.next()) {

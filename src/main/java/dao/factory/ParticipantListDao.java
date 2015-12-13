@@ -1,5 +1,6 @@
 package dao.factory;
 
+
 import entity.ParticipantList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,7 @@ import java.sql.*;
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class ParticipantListDao {
+public class ParticipantListDao extends Dao<ParticipantList>{
 
     private static final Logger log = LoggerFactory.getLogger(ParticipantListDao.class);
 
@@ -49,12 +50,13 @@ public class ParticipantListDao {
         return participantList;
     }
 
+    @Override
     public ParticipantList update(ParticipantList participantList, int id){
-
         return participantList;
     }
 
-    public  boolean delete(long id){
+    @Override
+    public boolean delete(int id) {
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
@@ -62,7 +64,7 @@ public class ParticipantListDao {
             Class.forName("org.h2.Driver");
             connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
             preparedStatement = connection.prepareStatement(DELETE_PARTICIPANT_LIST);
-            preparedStatement.setLong(1, id);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -70,17 +72,17 @@ public class ParticipantListDao {
         return  false;
     }
 
-    //TO DO сделать джойны, чтобы можно было посмотреть к кому относится.
-
-    public ParticipantList find (long id){
+    //TODO сделать джойны, чтобы можно было посмотреть к кому относится.
+    @Override
+    public ParticipantList find(int id) {
         Connection connection = null;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         try {
             Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
+            connection = DriverManager.getConnection("jdbc:h2:~/course", "GOD", "GOD");
             preparedStatement = connection.prepareStatement(FIND_PARTICIPANT_LIST);
-            preparedStatement.setLong(1, id);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

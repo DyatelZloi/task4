@@ -3,7 +3,7 @@ package entity;
 /**
  * Created by DiZi on 26.11.2015.
  */
-public class ParticipantList {
+public class ParticipantList extends BaseEntity {
 
     private long id;
 
