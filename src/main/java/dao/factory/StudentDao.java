@@ -22,30 +22,24 @@ public class StudentDao extends GenericDao<Student> {
 
     public static final  String UPDATE_STUDENT = "UPDATE STUDENT SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
 
-    public StudentDao(PooledConnection connection) {
-        super(connection);
+    private PooledConnection connection;
+
+    public StudentDao (PooledConnection connection){
+        this.connection = connection;
     }
 
     @Override
     public Student create (Student student){
-        //TO DO
-        // Вынести конекшн
-        // Должен быть отдельный класс
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(CREATE_STUDENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_STUDENT);
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getSurname());
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             long id = resultSet.getLong(1);
             student.setId(id);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -58,11 +52,8 @@ public class StudentDao extends GenericDao<Student> {
 
     @Override
     public Student update(Student student, int id){
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            preparedStatement = connection.prepareStatement(UPDATE_STUDENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STUDENT);
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getSurname());
             preparedStatement.executeUpdate();
@@ -75,11 +66,8 @@ public class StudentDao extends GenericDao<Student> {
 
     @Override
     public boolean delete (int id){
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            preparedStatement = connection.prepareStatement(DELETE_STUDENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_STUDENT);
             preparedStatement.setString(1, String.valueOf(id));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -90,18 +78,13 @@ public class StudentDao extends GenericDao<Student> {
 
     @Override
     public Student find(int id) {
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
-        ResultSet rs = null;
         Student student = new Student();
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(FIND_STUDENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_STUDENT);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             preparedStatement.executeUpdate();
+            ResultSet rs = null;
             while (rs.next()) {
                 int id2 = rs.getInt(1);
                 String name = rs.getString(2);
@@ -111,7 +94,7 @@ public class StudentDao extends GenericDao<Student> {
                 student.setName(name);
                 student.setSurname(String.valueOf(courseDescription));
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {

@@ -27,27 +27,24 @@ public class UserDao extends GenericDao<User> {
 
     public static final String DRIVER_CLASS_NAME = "org.h2.Driver";
 
-    public UserDao(PooledConnection connection) {
-        super(connection);
+    private PooledConnection connection;
+
+    public UserDao (PooledConnection connection){
+        this.connection = connection;
     }
 
     @Override
     public User create (User user){
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(CREATE_USER);
+            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER);
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             int id = resultSet.getInt(1);
             user.setId(id);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -60,22 +57,8 @@ public class UserDao extends GenericDao<User> {
 
     @Override
     public User update(User user, int id) {
-        ConnectionPool pool = null;
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        pool = ConnectionPool.getInstance();
-        pool.setDriverClassName(DRIVER_CLASS_NAME);
-        pool.setUserName("GOD");
-        pool.setPassword("GOD");
-        pool.setUrl("jdbc:h2:~/course");
-        pool.setConnectionNumber(4);
-        pool.initConnections();
-        //вынести в инициализаццию конекшена, чтобы не прописывать такое количество методов
-        con = pool.getConnection();
-        // вынести в фабрику использование конекшена
         try {
-            ps = con.prepareStatement(UPDATE_USER);
+            PreparedStatement ps = connection.prepareStatement(UPDATE_USER);
             ps.setString(1, user.getLogin());
             ps.setString(2, user.getPassword());
             ps.setInt(3, id);
@@ -84,7 +67,7 @@ public class UserDao extends GenericDao<User> {
             throw new DaoException("Ошибка при выполнении запроса",e);
         } finally {
             try {
-                con.close();
+                connection.close();
             } catch (Exception ignored) {
             }
         }
@@ -99,17 +82,11 @@ public class UserDao extends GenericDao<User> {
     @Override
     public User find(int id) {
         User user = new User();
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
-        ResultSet rs = null;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(FIND_USER);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER);
             preparedStatement.setInt(1, id);
             preparedStatement.execute();
-            rs = preparedStatement.getResultSet();
+            ResultSet rs = preparedStatement.getResultSet();
             while (rs.next()) {
                 int id2 = rs.getInt(1);
                 String login = rs.getString(2);
@@ -118,7 +95,7 @@ public class UserDao extends GenericDao<User> {
                 user.setLogin(login);
                 user.setPassword(password);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -139,20 +116,15 @@ public class UserDao extends GenericDao<User> {
 
     public User find (String login){
         User user = new User();
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(FIND_USER);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER);
             preparedStatement.setString(1,user.getLogin());
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getResultSet();
+            ResultSet resultSet = preparedStatement.getResultSet();
             resultSet.next();
             int id = resultSet.getInt(1);
             user.setId(id);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {

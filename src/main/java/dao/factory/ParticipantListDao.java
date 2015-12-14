@@ -23,28 +23,25 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
 
     public static final  String UPDATE_PARTICIPANT_LIST = "UPDATE StudentRegisteredForCourses SET ID_COURSE = (?), ID_STUDENT = (?), SCORE = (?), SHORTCOMMENT = (?) WHERE ID = (?)";
 
-    public ParticipantListDao(PooledConnection connection) {
-        super(connection);
+    private PooledConnection connection;
+
+    public ParticipantListDao (PooledConnection connection){
+        this.connection = connection;
     }
 
     public ParticipantList create (ParticipantList participantList){
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(CREATE_PARTICIPANT_LIST);
+            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_PARTICIPANT_LIST);
             preparedStatement.setString(1, String.valueOf(participantList.getIdCourse()));
             preparedStatement.setString(2, String.valueOf(participantList.getIdStudent()));
             preparedStatement.setString(3, String.valueOf(participantList.getScore()));
             preparedStatement.setString(4, participantList.getShortComment());
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             long id = resultSet.getLong(1);
             participantList.setId(id);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -62,16 +59,11 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
 
     @Override
     public boolean delete(int id) {
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(DELETE_PARTICIPANT_LIST);
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_PARTICIPANT_LIST);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return  false;
@@ -80,16 +72,11 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
     //TODO сделать джойны, чтобы можно было посмотреть к кому относится.
     @Override
     public ParticipantList find(int id) {
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course", "GOD", "GOD");
-            preparedStatement = connection.prepareStatement(FIND_PARTICIPANT_LIST);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_PARTICIPANT_LIST);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
