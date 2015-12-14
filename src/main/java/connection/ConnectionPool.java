@@ -69,8 +69,7 @@ public class ConnectionPool {
     public PooledConnection getConnection(){
         try {
             semaphore.acquire();
-            PooledConnection pooledConnection = connectionList.remove(0);
-            return pooledConnection;
+            return connectionList.remove(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -80,6 +79,5 @@ public class ConnectionPool {
     public void CloseConnection (){
         int realeseNumber = connectionNumber - semaphore.availablePermits();
         semaphore.release(realeseNumber);
-
     }
 }

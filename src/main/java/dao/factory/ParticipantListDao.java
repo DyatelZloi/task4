@@ -1,6 +1,7 @@
 package dao.factory;
 
 
+import connection.PooledConnection;
 import entity.ParticipantList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,10 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
     public static final String DELETE_PARTICIPANT_LIST = "DELETE FROM StudentRegisteredForCourses WHERE ID = (?)";
 
     public static final  String UPDATE_PARTICIPANT_LIST = "UPDATE StudentRegisteredForCourses SET ID_COURSE = (?), ID_STUDENT = (?), SCORE = (?), SHORTCOMMENT = (?) WHERE ID = (?)";
+
+    public ParticipantListDao(PooledConnection connection) {
+        super(connection);
+    }
 
     public ParticipantList create (ParticipantList participantList){
         Connection connection = null;

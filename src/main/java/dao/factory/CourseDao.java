@@ -1,6 +1,6 @@
 package dao.factory;
 
-import connection.ConnectionPool;
+import connection.PooledConnection;
 import dao.DaoException;
 import entity.OptionalCourse;
 import org.slf4j.Logger;
@@ -25,32 +25,21 @@ public class CourseDao extends GenericDao<OptionalCourse> {
 
     public static final String DRIVER_CLASS_NAME = "org.h2.Driver";
 
-     public OptionalCourse optionalCourse;
+    public OptionalCourse optionalCourse;
+
+    private PooledConnection connection;
+
+    public CourseDao (PooledConnection connection){
+        this.connection = connection;
+    }
 
     public OptionalCourse create (OptionalCourse course) throws DaoException  {
-        //TODO
-        // Вынести конекшн
-        // Должен быть отдельный класс
-        ConnectionPool pool = null;
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        pool = ConnectionPool.getInstance();
-        pool.setDriverClassName(DRIVER_CLASS_NAME);
-        pool.setUserName("GOD");
-        pool.setPassword("GOD");
-        pool.setUrl("jdbc:h2:~/course");
-        pool.setConnectionNumber(4);
-        pool.initConnections();
-        //вынести в инициализаццию конекшена, чтобы не прописывать такое количество методов
-        con = pool.getConnection();
-        // вынести в фабрику использование конекшена
         try {
-            ps = con.prepareStatement(CREATE_COURSE);
+            PreparedStatement ps = connection.prepareStatement(CREATE_COURSE);
             ps.setString(1, course.getName());
             ps.setString(2, course.getCourseDescription());
             ps.executeUpdate();
-            rs = ps.getGeneratedKeys();
+            ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             long id = rs.getLong(1);
             course.setId(id);
@@ -58,7 +47,7 @@ public class CourseDao extends GenericDao<OptionalCourse> {
             throw new DaoException("Ошибка при выполнении запроса",e);
         } finally {
             try {
-                con.close();
+                connection.close();
             } catch (Exception ignored) {
             }
         }
@@ -66,22 +55,8 @@ public class CourseDao extends GenericDao<OptionalCourse> {
     }
 
     public OptionalCourse update (OptionalCourse course, int id){
-        ConnectionPool pool = null;
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        pool = ConnectionPool.getInstance();
-        pool.setDriverClassName(DRIVER_CLASS_NAME);
-        pool.setUserName("GOD");
-        pool.setPassword("GOD");
-        pool.setUrl("jdbc:h2:~/course");
-        pool.setConnectionNumber(4);
-        pool.initConnections();
-        //вынести в инициализаццию конекшена, чтобы не прописывать такое количество методов
-        con = pool.getConnection();
-        // вынести в фабрику использование конекшена
         try {
-            ps = con.prepareStatement(UPDATE_COURSE);
+            PreparedStatement ps = connection.prepareStatement(UPDATE_COURSE);
             ps.setString(1, course.getName());
             ps.setString(2, course.getCourseDescription());
             ps.setInt(3, id);
@@ -90,7 +65,7 @@ public class CourseDao extends GenericDao<OptionalCourse> {
             throw new DaoException("Ошибка при выполнении запроса",e);
         } finally {
             try {
-                con.close();
+                connection.close();
             } catch (Exception ignored) {
             }
         }
@@ -99,21 +74,8 @@ public class CourseDao extends GenericDao<OptionalCourse> {
 
     @Override
     public boolean delete (int id){
-        ConnectionPool pool = null;
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        pool = ConnectionPool.getInstance();
-        pool.setDriverClassName(DRIVER_CLASS_NAME);
-        pool.setUserName("GOD");
-        pool.setPassword("GOD");
-        pool.setUrl("jdbc:h2:~/course");
-        pool.setConnectionNumber(4);
-        pool.initConnections();
-        //вынести в инициализаццию конекшена, чтобы не прописывать такое количество методов
-        con = pool.getConnection();
         try {
-            ps = con.prepareStatement(DELETE_COURSE);
+            PreparedStatement ps = connection.prepareStatement(DELETE_COURSE);
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -124,25 +86,11 @@ public class CourseDao extends GenericDao<OptionalCourse> {
 
     @Override
     public OptionalCourse find (int id){
-        ConnectionPool pool = null;
-
-        Connection con = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        pool = ConnectionPool.getInstance();
-        pool.setDriverClassName(DRIVER_CLASS_NAME);
-        pool.setUserName("GOD");
-        pool.setPassword("GOD");
-        pool.setUrl("jdbc:h2:~/course");
-        pool.setConnectionNumber(4);
-        pool.initConnections();
-        //вынести в инициализаццию конекшена, чтобы не прописывать такое количество методов
-        con = pool.getConnection();
         try {
-            ps = con.prepareStatement(FIND_COURSE);
+            PreparedStatement ps = connection.prepareStatement(FIND_COURSE);
             ps.setInt(1, id);
             ps.execute();
-            rs = ps.getResultSet();
+            ResultSet rs = ps.getResultSet();
             while (rs.next()) {
                 int id2 = rs.getInt(1);
                 String name = rs.getString(2);
@@ -160,5 +108,4 @@ public class CourseDao extends GenericDao<OptionalCourse> {
         }
         return  this.optionalCourse;
     }
-
 }

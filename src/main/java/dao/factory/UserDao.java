@@ -1,6 +1,7 @@
 package dao.factory;
 
 import connection.ConnectionPool;
+import connection.PooledConnection;
 import dao.DaoException;
 
 import entity.User;
@@ -25,6 +26,10 @@ public class UserDao extends GenericDao<User> {
     public static final  String UPDATE_USER = "UPDATE USER SET LOGIN = (?), PASSWORD = (?) WHERE ID = (?)";
 
     public static final String DRIVER_CLASS_NAME = "org.h2.Driver";
+
+    public UserDao(PooledConnection connection) {
+        super(connection);
+    }
 
     @Override
     public User create (User user){

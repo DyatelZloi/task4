@@ -32,7 +32,6 @@ public class CreateLecturerStrategy implements Strategy {
         GenericDao genericDao = daoFactory.getDao(LecturerDao.class);
         lecturer.setName(name);
         lecturer.setSurname(surname);
-        LecturerDao lecturerDao = new LecturerDao();
         genericDao.create(lecturer);
         try {
             response.sendRedirect("/lecturer-created.jsp");

@@ -1,5 +1,6 @@
 package dao.factory;
 
+import connection.PooledConnection;
 import entity.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,10 @@ public class StudentDao extends GenericDao<Student> {
     public static final String DELETE_STUDENT = "DELETE FROM STUDENT WHERE ID = (?)";
 
     public static final  String UPDATE_STUDENT = "UPDATE STUDENT SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
+
+    public StudentDao(PooledConnection connection) {
+        super(connection);
+    }
 
     @Override
     public Student create (Student student){
