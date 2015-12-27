@@ -16,13 +16,22 @@ import org.slf4j.LoggerFactory;
 @WebListener()
 public class ListenerConnections implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
-
+    /**
+     *
+     */
     private static final Logger log = LoggerFactory.getLogger(ListenerConnections.class);
 
+    /**
+     *
+     */
     // Public constructor is required by servlet spec
     public ListenerConnections() {
     }
 
+    /**
+     *
+     * @param sce
+     */
     // -------------------------------------------------------
     // ServletContextListener implementation
     // -------------------------------------------------------
@@ -33,6 +42,10 @@ public class ListenerConnections implements ServletContextListener,
       */
     }
 
+    /**
+     *
+     * @param sce
+     */
     public void contextDestroyed(ServletContextEvent sce) {
       /* This method is invoked when the Servlet Context 
          (the Web application) is undeployed or 
@@ -40,6 +53,10 @@ public class ListenerConnections implements ServletContextListener,
       */
     }
 
+    /**
+     *
+     * @param se
+     */
     // -------------------------------------------------------
     // HttpSessionListener implementation
     // -------------------------------------------------------
@@ -47,6 +64,10 @@ public class ListenerConnections implements ServletContextListener,
       /* Session is created. */
     }
 
+    /**
+     *
+     * @param se
+     */
     public void sessionDestroyed(HttpSessionEvent se) {
       /* Session is destroyed. */
     }
@@ -55,18 +76,30 @@ public class ListenerConnections implements ServletContextListener,
     // HttpSessionAttributeListener implementation
     // -------------------------------------------------------
 
+    /**
+     *
+     * @param sbe
+     */
     public void attributeAdded(HttpSessionBindingEvent sbe) {
       /* This method is called when an attribute 
          is added to a session.
       */
     }
 
+    /**
+     *
+     * @param sbe
+     */
     public void attributeRemoved(HttpSessionBindingEvent sbe) {
       /* This method is called when an attribute
          is removed from a session.
       */
     }
 
+    /**
+     *
+     * @param sbe
+     */
     public void attributeReplaced(HttpSessionBindingEvent sbe) {
       /* This method is invoked when an attibute
          is replaced in a session.

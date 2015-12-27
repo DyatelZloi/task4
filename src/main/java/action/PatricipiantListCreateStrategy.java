@@ -1,11 +1,14 @@
 package action;
 
-import dao.ParticipantListDao;
+import dao.factory.DaoFactory;
+import dao.factory.GenericDao;
+import dao.factory.ParticipantListDao;
 import entity.ParticipantList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Clob;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +18,36 @@ import org.slf4j.LoggerFactory;
  */
 public class PatricipiantListCreateStrategy implements Strategy {
 
+    /**
+     *
+     */
     private static final Logger log = LoggerFactory.getLogger(PatricipiantListCreateStrategy.class);
 
+    /**
+     *
+     */
     public static final String STUDENT_ID = "id-student";
+
+    /**
+     *
+     */
     public static final String COURSE_ID = "id-course";
+
+    /**
+     *
+     */
     public static final String SCORE = "score";
+
+    /**
+     *
+     */
     public static final String SHORT_COMMENT = "short-comment";
 
-
+    /**
+     *
+     * @param request
+     * @param response
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         String idStudent = request.getParameter(STUDENT_ID);
@@ -34,8 +59,13 @@ public class PatricipiantListCreateStrategy implements Strategy {
         participantList.setIdStudent(idStudent);
         participantList.setScore(score);
         participantList.setShortComment(shortComment);
-        ParticipantListDao participantListDao = new ParticipantListDao();
-        participantListDao.create(participantList);
+
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        daoFactory.beginTransaction();
+        GenericDao genericDao = daoFactory.getDao(ParticipantListDao.class);
+        genericDao.create(participantList);
+        daoFactory.commit();
+
         try {
             response.sendRedirect("/list-created.jsp");
         } catch (IOException e) {

@@ -19,14 +19,33 @@ import java.io.IOException;
  */
 public class UpdateUser implements Strategy {
 
+    /**
+     *
+     */
     private static final Logger log = LoggerFactory.getLogger(UpdateStudent.class);
 
+    /**
+     *
+     */
     public static final String USER_LOGIN = "login";
+
+    /**
+     *
+     */
     public static final String USER_PASSWORD = "password";
+
+    /**
+     *
+     */
     public static final String ID = "id";
 
+    /**
+     *
+     * @param request
+     * @param response
+     */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
         String login = request.getParameter(USER_LOGIN);
         String password = request.getParameter(USER_PASSWORD);
         int id = Integer.parseInt(request.getParameter(ID));
@@ -38,10 +57,9 @@ public class UpdateUser implements Strategy {
         GenericDao genericDao = daoFactory.getDao(UserDao.class);
         genericDao.update(user, id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-        dispatcher.forward(request, response);
         try {
-            response.sendRedirect("/index.jsp");
-        } catch (IOException e) {
+            dispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }

@@ -1,11 +1,5 @@
 package action;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 import dao.factory.DaoFactory;
 import dao.factory.GenericDao;
 import dao.factory.ParticipantListDao;
@@ -13,39 +7,41 @@ import entity.ParticipantList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by DiZi on 10.12.2015.
+ * Created by DiZi on 25.12.2015.
  */
-public class FindPatricipiantList implements Strategy {
+public class FindAllPatricipianListAction implements Strategy {
 
     /**
      *
      */
-    private static final Logger log = LoggerFactory.getLogger(FindPatricipiantList.class);
+    private static final Logger log = LoggerFactory.getLogger(FindCourse.class);
 
     /**
-     *
-     */
-    public static final String ID = "id";
-
-    /**
-     * Find a registered student by id
+     * Find all registered students
      *
      * @param request
      * @param response
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter(ID));
-
+        List<ParticipantList> list = new ArrayList<>();
         DaoFactory daoFactory = DaoFactory.getInstance();
         daoFactory.beginTransaction();
         GenericDao genericDao = daoFactory.getDao(ParticipantListDao.class);
-        ParticipantList participantList = (ParticipantList) genericDao.find(id);
+        list = genericDao.findAll();
         daoFactory.commit();
-
-        request.setAttribute("entity", participantList);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        request.setAttribute("createdcourses", list);
+        //TODO переименовать
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/created-courses.jsp");
         try {
             dispatcher.forward(request, response);
         } catch (ServletException | IOException e) {

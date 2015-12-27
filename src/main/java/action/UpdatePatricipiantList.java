@@ -1,6 +1,8 @@
 package action;
 
-import dao.ParticipantListDao;
+import dao.factory.DaoFactory;
+import dao.factory.GenericDao;
+import dao.factory.ParticipantListDao;
 import entity.ParticipantList;
 
 import javax.servlet.RequestDispatcher;
@@ -17,16 +19,43 @@ import org.slf4j.LoggerFactory;
  */
 public class UpdatePatricipiantList implements Strategy {
 
+    /**
+     *
+     */
     private static final Logger log = LoggerFactory.getLogger(UpdatePatricipiantList.class);
 
+    /**
+     *
+     */
     public static final String ID_COURSE = "id-course";
+
+    /**
+     *
+     */
     public static final String ID_STUDENT = "id-student";
+
+    /**
+     *
+     */
     public static final String SCORE = "score";
+
+    /**
+     *
+     */
     public static final String SHORT_COMMENT = "short-comment";
+
+    /**
+     *
+     */
     public static final String ID = "id";
 
+    /**
+     *
+     * @param request
+     * @param response
+     */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
         int idCourse = Integer.parseInt(request.getParameter(ID_COURSE));
         int idStudent = Integer.parseInt(request.getParameter(ID_STUDENT));
         int score = Integer.parseInt(request.getParameter(SCORE));
@@ -37,13 +66,17 @@ public class UpdatePatricipiantList implements Strategy {
         participantList.setIdCourse(idCourse);
         participantList.setScore(score);
         participantList.setShortComment(shortComment);
-        ParticipantListDao participantListDao = new ParticipantListDao();
-        participantListDao.update(participantList, id);
+
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        daoFactory.beginTransaction();
+        GenericDao genericDao = daoFactory.getDao(ParticipantListDao.class);
+        genericDao.update(participantList, id);
+        daoFactory.commit();
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/update-list.jsp");
-        dispatcher.forward(request, response);
         try {
-            response.sendRedirect("/update-list.jsp");
-        } catch (IOException e) {
+            dispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }

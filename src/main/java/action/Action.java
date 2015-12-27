@@ -24,10 +24,14 @@ public class Action {
 
     private Map map = new HashMap<String, Strategy>();
 
+
+    /**
+     * Заполнение мапы
+     */
     private void any () {
 
-        //TO DO переименуй, чтобы было более систематизировано
-        // тут всё что суём на нашей совести, осторожно
+        //TODO переименуй, чтобы было более систематизировано
+        // тут всё на нашей совести, осторожно
 
         map.put("create-course", new ConcreteStrategyAdd());
         map.put("create-lecturer", new CreateLecturerStrategy());
@@ -54,16 +58,39 @@ public class Action {
         map.put("find-list", new FindPatricipiantList());
         map.put("find-course", new FindCourse());
 
+        map.put("find-by-login", new FindByStringAction());
+
+        map.put("find-all-courses", new FindAllCourseAction());
+        map.put("find-all-user", new FindAllUserAction());
+        map.put("find-all-lecturer", new FindAllLecturer());
+        map.put("find-all-students", new FindAllStudent());
+
     }
 
+    /**
+     *
+     */
     public Action() {
         any();
     }
 
+    /**
+     *
+     * @param actionName
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
     public void setStrategy(String actionName) throws IllegalAccessException, InstantiationException {
         this.strategy = (Strategy) map.get(actionName);
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     public void executeStrategy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         strategy.execute(request, response);
     }

@@ -1,6 +1,8 @@
 package action;
 
-import dao.LecturerDao;
+import dao.factory.DaoFactory;
+import dao.factory.GenericDao;
+import dao.factory.LecturerDao;
 import entity.Lecturer;
 
 import javax.servlet.RequestDispatcher;
@@ -17,27 +19,53 @@ import org.slf4j.LoggerFactory;
  */
 public class UpdateLecturer implements Strategy {
 
+    /**
+     *
+     */
     private static final Logger log = LoggerFactory.getLogger(UpdateLecturer.class);
 
+    /**
+     *
+     */
     public static final String NAME_PARAMETER_NAME = "name";
+
+    /**
+     *
+     */
     public static final String LECTURER_SURNAME = "surname";
+
+    /**
+     *
+     */
     public static final String ID = "id";
 
+    //TODO переименовать класс
+
+    /**
+     * Update teacher by id
+     *
+     * @param request
+     * @param response
+     */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String surname = request.getParameter(LECTURER_SURNAME);
         int id = Integer.parseInt(request.getParameter(ID));
         Lecturer lecturer = new Lecturer();
         lecturer.setName(name);
         lecturer.setSurname(surname);
-        LecturerDao lecturerDao = new LecturerDao();
-        lecturerDao.update(lecturer, id);
+
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        daoFactory.beginTransaction();
+        GenericDao genericDao = daoFactory.getDao(LecturerDao.class);
+        genericDao.update(lecturer, id);
+        daoFactory.commit();
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/update-lecturer.jsp");
-        dispatcher.forward(request, response);
         try {
-            response.sendRedirect("/update-lecturer.jsp");
-        } catch (IOException e) {
+            dispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }

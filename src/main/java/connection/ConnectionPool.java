@@ -12,37 +12,95 @@ import java.util.concurrent.Semaphore;
  */
 public class ConnectionPool {
     //TODO внести некоторые корректировки (переделай)
+
+    /**
+     *
+     */
     public static final ConnectionPool pool = new ConnectionPool();
+
+    /**
+     *
+     */
     private List<PooledConnection> connectionList;
+
+    /**
+     *
+     */
     private String driverClassName;
+
+    /**
+     *
+     */
     private String url;
+
+    /**
+     *
+     */
     private String userName;
+
+    /**
+     *
+     */
     private String password;
+
+    /**
+     *
+     */
     private Integer connectionNumber;
+
+    /**
+     *
+     */
     private Semaphore semaphore;
 
+    /**
+     *
+     * @param driverClassName
+     */
     public void setDriverClassName(String driverClassName) {
         this.driverClassName = driverClassName;
     }
 
+    /**
+     *
+     * @param url
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     *
+     * @param userName
+     */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    /**
+     *
+     * @param password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     *
+     * @param connectionNumber
+     */
     public void setConnectionNumber(Integer connectionNumber) {
         this.connectionNumber = connectionNumber;
     }
 
+    /**
+     *
+     */
     private ConnectionPool(){}
 
+    /**
+     *
+     */
     public void initConnections (){
         try {
             Class.forName(driverClassName);
@@ -62,10 +120,18 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static ConnectionPool getInstance(){
         return  pool;
     }
 
+    /**
+     *
+     * @return
+     */
     public PooledConnection getConnection(){
         try {
             semaphore.acquire();
@@ -76,6 +142,9 @@ public class ConnectionPool {
         return null;
     }
 
+    /**
+     *
+     */
     public void CloseConnection (){
         int realeseNumber = connectionNumber - semaphore.availablePermits();
         semaphore.release(realeseNumber);

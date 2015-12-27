@@ -22,30 +22,45 @@ import org.slf4j.LoggerFactory;
  */
 public class ConcreteStrategyAdd implements Strategy {
 
+    /**
+     *
+     */
     private static final Logger log = LoggerFactory.getLogger(ConcreteStrategyAdd.class);
 
+    /**
+     *
+     */
     public static final String NAME_PARAMETER_NAME = "name";
-    public static final String COURSE_DESCRIPTION_PARAMETER_NAME = "course-description";
-    public static  final int textA = 0;
 
+    /**
+     *
+     */
+    public static final String COURSE_DESCRIPTION_PARAMETER_NAME = "course-description";
+
+    /**
+     * Add course
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String courseDescription = request.getParameter(COURSE_DESCRIPTION_PARAMETER_NAME);
         OptionalCourse course = new OptionalCourse();
         course.setName(name);
         course.setCourseDescription(courseDescription);
         DaoFactory daoFactory = DaoFactory.getInstance();
+        daoFactory.beginTransaction();
         GenericDao genericDao = daoFactory.getDao(CourseDao.class);
         genericDao.create(course);
-        request.setAttribute("textA", textA);
-        ResourceBundle bundle = ResourceBundle.getBundle("words");
-        request.setAttribute("bundle", bundle);
+        daoFactory.commit();
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-        dispatcher.forward(request, response);
         try {
-            response.sendRedirect("/course-created.jsp");
-        } catch (IOException e) {
+            dispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }

@@ -25,6 +25,12 @@ public class CreateUser implements Strategy {
 
     public static final String USER_PASSWORD = "password";
 
+    /**
+     * Add user
+     *
+     * @param request
+     * @param response
+     */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         String login = request.getParameter(USER_LOGIN);
@@ -33,8 +39,10 @@ public class CreateUser implements Strategy {
         user.setLogin(login);
         user.setPassword(password);
         DaoFactory daoFactory = DaoFactory.getInstance();
+        daoFactory.beginTransaction();
         GenericDao genericDao = daoFactory.getDao(UserDao.class);
         genericDao.create(user);
+        daoFactory.commit();
         try {
             response.sendRedirect("/list-created.jsp");
         } catch (IOException e) {

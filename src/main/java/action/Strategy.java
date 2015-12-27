@@ -9,5 +9,11 @@ import java.io.IOException;
  * Created by DiZi on 02.12.2015.
  */
 public interface Strategy {
-    void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+
+    /**
+     *
+     * @param request
+     * @param response
+     */
+    void execute(HttpServletRequest request, HttpServletResponse response);
 }

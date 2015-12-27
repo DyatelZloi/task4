@@ -17,21 +17,33 @@ import org.slf4j.LoggerFactory;
  */
 public class FindUser implements Strategy {
 
+    /**
+     *
+     */
     private static final Logger log = LoggerFactory.getLogger(FindUser.class);
 
+    /**
+     *
+     */
     public static final String ID = "id";
 
+    /**
+     * Find user by id
+     * @param request
+     * @param response
+     */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter(ID));
         DaoFactory daoFactory = DaoFactory.getInstance();
+        daoFactory.beginTransaction();
         GenericDao genericDao = daoFactory.getDao(UserDao.class);
         request.setAttribute("entity", genericDao.find(id));
+        daoFactory.commit();
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-        dispatcher.forward(request, response);
         try {
-            response.sendRedirect("/index.jsp");
-        } catch (IOException e) {
+            dispatcher.forward(request, response);
+        } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
     }
