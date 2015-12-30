@@ -1,5 +1,6 @@
 package action;
 
+import dao.ExceptionDao;
 import dao.FactoryDao;
 import dao.GenericDao;
 
@@ -32,6 +33,7 @@ public class UpdateUserAction implements Strategy {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        log.info("");
         String login = request.getParameter(USER_LOGIN);
         String password = request.getParameter(USER_PASSWORD);
         int id = Integer.parseInt(request.getParameter(ID));
@@ -39,9 +41,18 @@ public class UpdateUserAction implements Strategy {
         user.setLogin(login);
         user.setPassword(password);
         user.setId(id);
+        log.info("");
         FactoryDao factoryDao = FactoryDao.getInstance();
         GenericDao genericDao = factoryDao.getDao(UserDao.class);
-        genericDao.update(user, id);
+        try {
+            log.info("");
+            genericDao.update(user, id);
+        } catch (ExceptionDao e) {
+            log.error("");
+            factoryDao.rollback();
+        }
+        factoryDao.commit();
+        log.info("");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
         try {
             dispatcher.forward(request, response);

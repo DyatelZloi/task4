@@ -44,7 +44,7 @@ public class UpdatePatricipiantListAction implements Strategy {
         participantList.setIdCourse(idCourse);
         participantList.setScore(score);
         participantList.setShortComment(shortComment);
-
+        
         FactoryDao factoryDao = FactoryDao.getInstance();
         factoryDao.beginTransaction();
         GenericDao genericDao = factoryDao.getDao(ParticipantListDao.class);

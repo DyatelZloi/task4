@@ -1,5 +1,6 @@
 package action;
 
+import dao.ExceptionDao;
 import dao.FactoryDao;
 import dao.GenericDao;
 import dao.StudentDao;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import jdk.nashorn.internal.runtime.ECMAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,19 +34,26 @@ public class UpdateStudentAction implements Strategy {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        log.info("");
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String surname = request.getParameter(STUDENT_SURNAME);
         int id = Integer.parseInt(request.getParameter(ID));
         Student student = new Student();
         student.setName(name);
         student.setSurname(surname);
-
+        log.info("");
         FactoryDao factoryDao = FactoryDao.getInstance();
-        factoryDao.beginTransaction();
         GenericDao genericDao = factoryDao.getDao(StudentDao.class);
-        genericDao.update(student, id);
+        factoryDao.beginTransaction();
+        try {
+            log.info("");
+            genericDao.update(student, id);
+        }catch (ExceptionDao e) {
+            log.error("");
+            factoryDao.rollback();
+        }
         factoryDao.commit();
-
+        log.info("");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/update-student.jsp");
         try {
             dispatcher.forward(request, response);
