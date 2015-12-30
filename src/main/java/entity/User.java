@@ -5,20 +5,10 @@ package entity;
  */
 public class User extends BaseEntity{
 
-    /**
-     *
-     */
-    int id;
-
-    /**
-     *
-     */
-    String login;
-
-    /**
-     *
-     */
-    String password;
+    private int id;
+    private String login;
+    private String password;
+    private String role;
 
     /**
      *
@@ -27,11 +17,6 @@ public class User extends BaseEntity{
     public String getRole() {
         return role;
     }
-
-    /**
-     *
-     */
-    String role;
 
     /**
      *
@@ -46,9 +31,7 @@ public class User extends BaseEntity{
     /**
      *
      */
-    public User() {
-
-    }
+    public User() {}
 
     /**
      *

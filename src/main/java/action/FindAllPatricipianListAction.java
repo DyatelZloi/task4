@@ -1,8 +1,8 @@
 package action;
 
-import dao.factory.DaoFactory;
-import dao.factory.GenericDao;
-import dao.factory.ParticipantListDao;
+import dao.FactoryDao;
+import dao.GenericDao;
+import dao.ParticipantListDao;
 import entity.ParticipantList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +20,7 @@ import java.util.List;
  */
 public class FindAllPatricipianListAction implements Strategy {
 
-    /**
-     *
-     */
-    private static final Logger log = LoggerFactory.getLogger(FindCourse.class);
+    private static final Logger log = LoggerFactory.getLogger(FindCourseAction.class);
 
     /**
      * Find all registered students
@@ -34,11 +31,11 @@ public class FindAllPatricipianListAction implements Strategy {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         List<ParticipantList> list = new ArrayList<>();
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        daoFactory.beginTransaction();
-        GenericDao genericDao = daoFactory.getDao(ParticipantListDao.class);
+        FactoryDao factoryDao = FactoryDao.getInstance();
+        factoryDao.beginTransaction();
+        GenericDao genericDao = factoryDao.getDao(ParticipantListDao.class);
         list = genericDao.findAll();
-        daoFactory.commit();
+        factoryDao.commit();
         request.setAttribute("createdcourses", list);
         //TODO переименовать
         RequestDispatcher dispatcher = request.getRequestDispatcher("/created-courses.jsp");

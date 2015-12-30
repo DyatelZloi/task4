@@ -16,9 +16,7 @@ import org.slf4j.LoggerFactory;
 @WebListener()
 public class ListenerConnections implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
-    /**
-     *
-     */
+
     private static final Logger log = LoggerFactory.getLogger(ListenerConnections.class);
 
     /**

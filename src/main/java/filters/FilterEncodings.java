@@ -15,9 +15,6 @@ import org.slf4j.LoggerFactory;
 @WebFilter(filterName = "FilterEncodings", urlPatterns = "/*")
 public class FilterEncodings implements Filter {
 
-    /**
-     *
-     */
     private static final Logger log = LoggerFactory.getLogger(FilterEncodings.class);
 
     /**

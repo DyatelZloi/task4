@@ -5,19 +5,8 @@ package entity;
  */
 public class Student extends BaseEntity{
 
-    /**
-     *
-     */
     private long id;
-
-    /**
-     *
-     */
     private String name;
-
-    /**
-     *
-     */
     private String surname;
 
     /**

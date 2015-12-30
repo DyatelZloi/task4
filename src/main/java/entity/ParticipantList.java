@@ -7,29 +7,10 @@ import java.sql.Clob;
  */
 public class ParticipantList extends BaseEntity {
 
-    /**
-     *
-     */
     private long id;
-
-    /**
-     *
-     */
     private long idStudent;
-
-    /**
-     *
-     */
     private long idCourse;
-
-    /**
-     *
-     */
     private int score;
-
-    /**
-     *
-     */
     private String shortComment;
 
     /**

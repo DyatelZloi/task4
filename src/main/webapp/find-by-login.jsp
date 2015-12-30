@@ -10,6 +10,5 @@
     <input type="password" name="password" id="password">
     <button type="submit">Find</button>
 </form>
-${createdcourses}
 </body>
 </html>

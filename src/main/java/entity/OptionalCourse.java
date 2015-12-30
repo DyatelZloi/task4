@@ -5,24 +5,9 @@ package entity;
  */
 public class OptionalCourse extends BaseEntity{
 
-    /**
-     *
-     */
     private long id;
-
-    /**
-     *
-     */
     private String name;
-
-    /**
-     *
-     */
     private long lecturer;
-
-    /**
-     *
-     */
     private String courseDescription;
 
     /**

@@ -1,99 +1,144 @@
 package dao;
 
+import connection.PooledConnection;
+import dao.ExceptionDao;
 import entity.Student;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.List;
 
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class StudentDao {
+public class StudentDao extends GenericDao<Student> {
 
     private static final Logger log = LoggerFactory.getLogger(StudentDao.class);
 
+    /**
+     *
+     */
     public static final String CREATE_STUDENT = "INSERT INTO STUDENT (ID, NAME, SURNAME) VALUES (DEFAULT, ?, ?)";
 
+    /**
+     *
+     */
     public static final String FIND_STUDENT = "SELECT * FROM STUDENT WHERE ID = (?)";
 
+    /**
+     *
+     */
     public static final String DELETE_STUDENT = "DELETE FROM STUDENT WHERE ID = (?)";
 
+    /**
+     *
+     */
     public static final  String UPDATE_STUDENT = "UPDATE STUDENT SET NAME = (?), SURNAME = (?) WHERE ID = (?)";
 
+    /**
+     *
+     */
+    public  static final String FIND_ALL = "SELECT * FROM student";
+
+    /**
+     *
+     */
+    private PooledConnection connection;
+
+    /**
+     *
+     */
+    private Student student;
+
+    /**
+     *
+     * @param connection
+     */
+    public StudentDao (PooledConnection connection){
+        this.connection = connection;
+    }
+
+    /**
+     * Create student
+     *
+     * @param student
+     * @return
+     */
+    @Override
     public Student create (Student student){
-        //TO DO
-        // Вынести конекшн
-        // Должен быть отдельный класс
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(CREATE_STUDENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(CREATE_STUDENT);
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getSurname());
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             long id = resultSet.getLong(1);
             student.setId(id);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (Exception ignored) {
-            }
+        } catch (SQLException e) {
+            throw new ExceptionDao("Проблемы при создании курса", e);
         }
         return student;
     }
 
+    /**
+     * Update student
+     *
+     * @param student
+     * @param id
+     * @return
+     */
+    @Override
     public Student update(Student student, int id){
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            preparedStatement = connection.prepareStatement(UPDATE_STUDENT);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STUDENT);
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getSurname());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ExceptionDao("Проблемы при создании курса", e);
         }
 
         return student;
     }
 
+    /**
+     * Delete student by id
+     *
+     * @param id
+     * @return
+     */
+    @Override
     public boolean delete (int id){
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
         try {
-            preparedStatement = connection.prepareStatement(DELETE_STUDENT);
-            preparedStatement.setString(1, String.valueOf(id));
-            preparedStatement.executeUpdate();
+            PreparedStatement ps = connection.prepareStatement(DELETE_STUDENT);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            if (ps.getUpdateCount() != 0){
+                return true;
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new ExceptionDao("Проблемы при создании курса", e);
         }
         return false;
     }
 
-    public Student find (long id){
-        Connection connection = null;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
-        ResultSet rs = null;
+    /**
+     * Find student by id
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Student find(int id) {
         Student student = new Student();
         try {
-            Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:~/course","GOD","GOD");
-            preparedStatement = connection.prepareStatement(FIND_STUDENT);
-            preparedStatement.setLong(1, id);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_STUDENT);
+            preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
             preparedStatement.executeUpdate();
+            ResultSet rs = null;
             while (rs.next()) {
                 int id2 = rs.getInt(1);
                 String name = rs.getString(2);
@@ -103,14 +148,48 @@ public class StudentDao {
                 student.setName(name);
                 student.setSurname(String.valueOf(courseDescription));
             }
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (Exception ignored) {
-            }
+        } catch (SQLException e) {
+            throw new ExceptionDao("Проблемы при создании курса", e);
         }
         return student;
+    }
+
+    /**
+     * Find student by string ()
+     *
+     * @param string
+     * @return
+     */
+    @Override
+    public Student findBy(String string) {
+        return null;
+    }
+
+    /**
+     * Find all students
+     *
+     * @return
+     */
+    @Override
+    public List<Student> findAll() {
+        List<Student> list = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_ALL);
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                String surname = rs.getString(3);
+                student = new Student();
+                student.setId(id);
+                student.setName(name);
+                student.setSurname(surname);
+                list.add(student);
+            }
+        } catch (SQLException e) {
+            throw new ExceptionDao("Проблемы при создании курса", e);
+        }
+        return list;
     }
 }

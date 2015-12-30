@@ -20,19 +20,9 @@ import org.slf4j.LoggerFactory;
  */
 @WebFilter(filterName = "FilterSecurity", urlPatterns = "/*")
 public class FilterSecurity implements Filter {
-    /**
-     *
-     */
+
     private static final Logger log = LoggerFactory.getLogger(FilterSecurity.class);
-
-    /**
-     *
-     */
-    ResourceBundle bundle;
-
-    /**
-     *
-     */
+    private ResourceBundle bundle;
     private Map map = new HashMap<String, String>();
 
 
@@ -61,17 +51,9 @@ public class FilterSecurity implements Filter {
             System.out.println(session.getAttribute("login"));
             System.out.println(session.getAttribute("role"));
             System.out.println(request.getParameter("action"));
-
-            boolean a = map.containsValue(session.getAttribute("role"));
-            boolean b = map.containsKey(request.getParameter("action"));
-            if (!a | !b){
-                response.sendRedirect("/admin-home.jsp");
-            }
-
         } else {
-            session = req.getSession(false);
-            session.setAttribute("login","guest");
-            session.setAttribute("role","guest");
+            session = req.getSession();
+            session.setAttribute("bundle", bundle);
         }
 
     //    String action = req.getParameter("action");
@@ -92,9 +74,5 @@ public class FilterSecurity implements Filter {
      */
     public void init(FilterConfig config) throws ServletException {
         bundle = ResourceBundle.getBundle("words");
-        map.put("user","find-all-courses");
-        map.put("user","find-all-courses");
-        map.put("guest","create-course");
     }
-
 }

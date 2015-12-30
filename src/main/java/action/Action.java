@@ -1,7 +1,5 @@
 package action;
 
-import entity.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +18,8 @@ public class Action {
     private static final Logger log = LoggerFactory.getLogger(Action.class);
 
         //TODO переименовать, имя не подхожящее
-    private Strategy strategy;
 
+    private Strategy strategy;
     private Map map = new HashMap<String, Strategy>();
 
 
@@ -33,38 +31,43 @@ public class Action {
         //TODO переименуй, чтобы было более систематизировано
         // тут всё на нашей совести, осторожно
 
-        map.put("create-course", new ConcreteStrategyAdd());
-        map.put("create-lecturer", new CreateLecturerStrategy());
-        map.put("create-student", new CreateStudentStrategy());
-        map.put("participiant-list-create", new PatricipiantListCreateStrategy());
-        map.put("registration", new CreateUser());
-        map.put("course-created", new FindCourse());
+        map.put("create-course", new CreateCourseAction());
+        map.put("create-lecturer", new CreateTeacherAction());
+        map.put("create-student", new CreateStudentAction());
+        map.put("participiant-list-create", new CreatePatricipiantListAction());
+        map.put("registration", new CreateUserAction());
+        map.put("course-created", new FindCourseAction());
 
-        map.put("update-course", new UpdateCourse());
-        map.put("update-user", new UpdateUser());
-        map.put("update-lecturer", new UpdateLecturer());
-        map.put("update-student", new UpdateStudent());
-        map.put("update-list", new UpdatePatricipiantList());
+        map.put("update-course", new UpdateCourseAction());
+        map.put("update-user", new UpdateUserAction());
+        map.put("update-lecturer", new UpdateTeacherAction());
+        map.put("update-student", new UpdateStudentAction());
+        map.put("update-list", new UpdatePatricipiantListAction());
 
-        map.put("delete-user", new DeleteUser());
-        map.put("delete-list", new DeletePatricipiantList());
-        map.put("delete-student", new DeleteStudent());
-        map.put("delete-lecturer", new DeleteLecturer());
-        map.put("course-delete", new DeleteCourse());
+        map.put("delete-user", new DeleteUserAction());
+        map.put("delete-list", new DeletePatricipiantListAction());
+        map.put("delete-student", new DeleteStudentAction());
+        map.put("delete-lecturer", new DeleteTeacherAction());
+        map.put("course-delete", new DeleteCourseAction());
 
-        map.put("find-lecturer", new FindLecturer());
-        map.put("find-user", new FindUser());
-        map.put("find-student", new FindStudent());
-        map.put("find-list", new FindPatricipiantList());
-        map.put("find-course", new FindCourse());
+        map.put("find-lecturer", new FindTeacherAction());
+        map.put("find-user", new FindUserAction());
+        map.put("find-student", new FindStudentAction());
+        map.put("find-list", new FindPatricipiantListAction());
+        map.put("find-course", new FindCourseAction());
 
         map.put("find-by-login", new FindByStringAction());
 
         map.put("find-all-courses", new FindAllCourseAction());
-        map.put("find-all-user", new FindAllUserAction());
-        map.put("find-all-lecturer", new FindAllLecturer());
-        map.put("find-all-students", new FindAllStudent());
+        map.put("find-all-user", new FindAllUsersAction());
+        map.put("find-all-lecturer", new FindAllTeachersAction());
+        map.put("find-all-students", new FindAllStudentAction());
 
+        map.put("log-out", new LogOutAction());
+
+        map.put("to-registration", new MoveToRegistrationPageAction());
+        map.put("to-log-in", new MoveToLogInAction());
+        map.put("to-user-home", new MoveToUserHomeAction());
     }
 
     /**

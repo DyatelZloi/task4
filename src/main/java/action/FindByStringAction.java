@@ -1,8 +1,8 @@
 package action;
 
-import dao.factory.DaoFactory;
-import dao.factory.GenericDao;
-import dao.factory.UserDao;
+import dao.FactoryDao;
+import dao.GenericDao;
+import dao.UserDao;
 import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,22 +18,10 @@ import java.io.IOException;
  */
 public class FindByStringAction implements Strategy{
 
-    /**
-     *
-     */
-    private static final String LOGIN = "login";
-
-    /**
-     *
-     */
-    private static final String PASSWORD = "password";
-
-    /**
-     *
-     */
     private static final Logger log = LoggerFactory.getLogger(FindByStringAction.class);
 
-    //TODO сессии
+    private static final String LOGIN = "login";
+    private static final String PASSWORD = "password";
 
     /**
      * Find user by string (login)
@@ -43,14 +31,14 @@ public class FindByStringAction implements Strategy{
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession(false);
         String login = request.getParameter(LOGIN);
         String password = request.getParameter(PASSWORD);
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        daoFactory.beginTransaction();
-        GenericDao genericDao = daoFactory.getDao(UserDao.class);
+        FactoryDao factoryDao = FactoryDao.getInstance();
+        factoryDao.beginTransaction();
+        GenericDao genericDao = factoryDao.getDao(UserDao.class);
         User user = (User) genericDao.findBy(login);
-        daoFactory.commit();
+        factoryDao.commit();
         if (user.getPassword().equals(password)){
             request.setAttribute("entity", user);
             session.setAttribute("login", user.getLogin());

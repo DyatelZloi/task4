@@ -115,7 +115,7 @@ public class ConnectionPool {
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionList.add(pooledConnection);
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new ConnectionPoolException("Проблемы с конекшеном", e);
             }
         }
     }
@@ -137,9 +137,8 @@ public class ConnectionPool {
             semaphore.acquire();
             return connectionList.remove(0);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new ConnectionPoolException("Проблемы с конекшеном", e);
         }
-        return null;
     }
 
     /**
