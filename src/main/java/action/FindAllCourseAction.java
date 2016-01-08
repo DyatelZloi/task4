@@ -2,6 +2,7 @@ package action;
 
 
 import dao.CourseDao;
+import dao.ExceptionDao;
 import dao.FactoryDao;
 import dao.GenericDao;
 import entity.OptionalCourse;
@@ -25,27 +26,34 @@ public class FindAllCourseAction implements Strategy {
      */
     private static final Logger log = LoggerFactory.getLogger(FindCourseAction.class);
 
+    private static final String DIRECTORY = "directory";
     //TODO переименовать
 
     /**
      * Find all courses
-     *
-     * @param request
-     * @param response
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        List<OptionalCourse> list;
+        log.info("Begin search all courses");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
+        List list = null;
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
-        factoryDao.beginTransaction();
         GenericDao genericDao = factoryDao.getDao(CourseDao.class);
-        list = genericDao.findAll();
+        factoryDao.beginTransaction();
+        try{
+            log.debug("Query execution");
+            list = genericDao.findAll();
+        } catch (ExceptionDao e) {
+            log.error("Unable to execute query");
+            factoryDao.rollback();
+        }
         factoryDao.commit();
+        log.info("Search all course completed");
         request.setAttribute("en", list);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/find-all-course-g.jsp");
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

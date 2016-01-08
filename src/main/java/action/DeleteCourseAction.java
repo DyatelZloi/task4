@@ -21,33 +21,32 @@ public class DeleteCourseAction implements Strategy {
     private static final Logger log = LoggerFactory.getLogger(DeleteCourseAction.class);
 
     private static final String ID = "id";
+    private static final String DIRECTORY = "directory";
 
     /**
-     * Delete course by id
-     *
-     * @param request
-     * @param response
+     * Delete a course by id
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response){
-        log.info("Начинаем удаление курса");
+        log.info("Begin to delete a course");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int id = Integer.parseInt(request.getParameter(ID));
-        log.info("Устанавили параметры");
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
         GenericDao genericDao = factoryDao.getDao(CourseDao.class);
         factoryDao.beginTransaction();
         try{
-            log.info("Выполнение запроса");
+            log.debug("Query execution");
             genericDao.delete(id);
         } catch (ExceptionDao e) {
-            log.error("Запрос неудачен");
+            log.error("Unable to execute query");
             factoryDao.rollback();
         }
         factoryDao.commit();
-        log.info("Удаление завершено");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        log.info("Delete a course completed");
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

@@ -1,13 +1,13 @@
 package dao;
 
 import connection.PooledConnection;
-import dao.ExceptionDao;
 
 import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,45 +16,14 @@ import java.util.List;
 public class UserDao extends GenericDao<User> {
 
     private static final Logger log = LoggerFactory.getLogger(UserDao.class);
-
-    /**
-     *
-     */
-    public static  final String FIND_USER = "SELECT * FROM user WHERE ID = (?)";
-
-    /**
-     *
-     */
-    public static final String CREATE_USER = "INSERT INTO user (ID, LOGIN, PASSWORD) VALUES (DEFAULT, ?, ?)";
-
-    /**
-     *
-     */
-    public static final String DELETE_USER = "DELETE FROM user WHERE id = (?)";
-
-    /**
-     *
-     */
-    public static final  String UPDATE_USER = "UPDATE user SET login = (?), password = (?) WHERE ID = (?)";
-
-    /**
-     *
-     */
+    private static  final String FIND_USER = "SELECT * FROM user WHERE id_user = (?)";
+    private static final String CREATE_USER = "INSERT INTO user (id_user, login, password) VALUES (DEFAULT, ?, ?)";
+    private static final String DELETE_USER = "DELETE FROM user WHERE id_user = (?)";
+    private static final  String UPDATE_USER = "UPDATE user SET login = (?), password = (?), email = (?), name = (?), surname = (?) WHERE id_user = (?)";
+    private static final  String SET_ROLE = "UPDATE user SET role = (?) WHERE id_user = (?)";
     private static final String FIND_USER_BY_NAME = "SELECT * FROM user WHERE login = (?)";
-
-    /**
-     *
-     */
-    public  static final String FIND_ALL = "SELECT * FROM user";
-
-    /**
-     *
-     */
+    private  static final String FIND_ALL = "SELECT * FROM user";
     private PooledConnection connection;
-
-    /**
-     *
-     */
     private User user;
 
     /**
@@ -63,6 +32,10 @@ public class UserDao extends GenericDao<User> {
      */
     public UserDao (PooledConnection connection){
         this.connection = connection;
+    }
+
+    public UserDao() {
+
     }
 
     /**
@@ -83,7 +56,7 @@ public class UserDao extends GenericDao<User> {
             int id = resultSet.getInt(1);
             user.setId(id);
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return user;
     }
@@ -98,13 +71,28 @@ public class UserDao extends GenericDao<User> {
     @Override
     public User update(User user, int id) {
         try {
+            PreparedStatement ps = connection.prepareStatement(SET_ROLE);
+            ps.setString(1, user.getRole());
+            ps.setString(2, String.valueOf(user.getId()));
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new ExceptionDao("Error executing query",e);
+        }
+        return user;
+    }
+
+    public User update2(User user, int id){
+        try {
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER);
             ps.setString(1, user.getLogin());
             ps.setString(2, user.getPassword());
-            ps.setInt(3, id);
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getName());
+            ps.setString(5, user.getSurname());
+            ps.setString(6, String.valueOf(id));
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Ошибка при выполнении запроса",e);
+            throw new ExceptionDao("Error executing query",e);
         }
         return user;
     }
@@ -132,7 +120,7 @@ public class UserDao extends GenericDao<User> {
                 user.setPassword(password);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return user;
     }
@@ -140,29 +128,33 @@ public class UserDao extends GenericDao<User> {
     /**
      * Find user by string (login)
      *
-     * @param string
      * @return
      */
     @Override
-    public User findBy(String string) {
+    public User findBy(String login) {
         User user = new User();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_USER_BY_NAME);
-            preparedStatement.setString(1, string);
+            preparedStatement.setString(1, login);
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getResultSet();
             while (rs.next()) {
                 int id2 = rs.getInt(1);
-                String login = rs.getString(2);
                 String password = rs.getString(3);
                 String role = rs.getString(4);
+                String email = rs.getString(5);
+                String name = rs.getString(6);
+                String surname = rs.getString(7);
                 user.setId(id2);
                 user.setLogin(login);
                 user.setPassword(password);
                 user.setRole(role);
+                user.setEmail(email);
+                user.setName(name);
+                user.setSurname(surname);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return user;
     }
@@ -174,8 +166,7 @@ public class UserDao extends GenericDao<User> {
      */
     @Override
     public List<User> findAll() {
-
-        List<User> list = null;
+        List list = new ArrayList();
         try {
             PreparedStatement ps = connection.prepareStatement(FIND_ALL);
             ps.execute();
@@ -184,16 +175,29 @@ public class UserDao extends GenericDao<User> {
                 int id = rs.getInt(1);
                 String login = rs.getString(2);
                 String password = rs.getString(3);
+                String role = rs.getString(4);
+                String email = rs.getString(5);
+                String name = rs.getString(6);
+                String surname = rs.getString(7);
                 user = new User();
                 user.setId(id);
                 user.setLogin(login);
                 user.setPassword(password);
+                user.setRole(role);
+                user.setName(name);
+                user.setSurname(surname);
+                user.setEmail(email);
                 list.add(user);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return list;
+    }
+
+    @Override
+    public List<User> findAllBy(int string) {
+        return null;
     }
 
     /**
@@ -213,7 +217,7 @@ public class UserDao extends GenericDao<User> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return false;
     }

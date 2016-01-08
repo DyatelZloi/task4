@@ -7,7 +7,7 @@ public class OptionalCourse extends BaseEntity{
 
     private long id;
     private String name;
-    private long lecturer;
+    private int lecturer;
     private String courseDescription;
 
     /**
@@ -62,7 +62,7 @@ public class OptionalCourse extends BaseEntity{
      *
      * @return
      */
-    public long getLecturer() {
+    public int getLecturer() {
         return lecturer;
     }
 
@@ -70,7 +70,7 @@ public class OptionalCourse extends BaseEntity{
      *
      * @param lecturer
      */
-    public void setLecturer(long lecturer) {
+    public void setLecturer(int lecturer) {
         this.lecturer = lecturer;
     }
 

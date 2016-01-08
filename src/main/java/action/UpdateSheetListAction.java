@@ -1,11 +1,8 @@
 package action;
 
-import dao.FactoryDao;
-import dao.GenericDao;
-import dao.ParticipantListDao;
+import dao.*;
 import entity.ParticipantList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,43 +14,43 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by DiZi on 10.12.2015.
  */
-public class UpdatePatricipiantListAction implements Strategy {
+public class UpdateSheetListAction implements Strategy {
 
-    private static final Logger log = LoggerFactory.getLogger(UpdatePatricipiantListAction.class);
+    private static final Logger log = LoggerFactory.getLogger(UpdateSheetListAction.class);
 
-    private static final String ID_COURSE = "id-course";
-    private static final String ID_STUDENT = "id-student";
     private static final String SCORE = "score";
     private static final String SHORT_COMMENT = "short-comment";
     private static final String ID = "id";
+    private static final String DIRECTORY = "directory";
 
     /**
-     *
-     * @param request
-     * @param response
+     * Update a sheet list by id
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        int idCourse = Integer.parseInt(request.getParameter(ID_COURSE));
-        int idStudent = Integer.parseInt(request.getParameter(ID_STUDENT));
+        log.info("Begin update a sheet list");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int score = Integer.parseInt(request.getParameter(SCORE));
         String shortComment = request.getParameter(SHORT_COMMENT);
         int id = Integer.parseInt(request.getParameter(ID));
         ParticipantList participantList = new ParticipantList();
-        participantList.setIdStudent(idStudent);
-        participantList.setIdCourse(idCourse);
         participantList.setScore(score);
         participantList.setShortComment(shortComment);
-        
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
         factoryDao.beginTransaction();
-        GenericDao genericDao = factoryDao.getDao(ParticipantListDao.class);
-        genericDao.update(participantList, id);
+        GenericDao genericDao = factoryDao.getDao(SheetListDao.class);
+        try{
+            log.debug("Query execution");
+            genericDao.update(participantList, id);
+        } catch (ExceptionDao e) {
+            log.error("Unable to execute query");
+            factoryDao.rollback();
+        }
         factoryDao.commit();
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/update-list.jsp");
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

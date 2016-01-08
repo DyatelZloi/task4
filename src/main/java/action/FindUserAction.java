@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import dao.ExceptionDao;
 import dao.GenericDao;
 import dao.FactoryDao;
 import dao.UserDao;
+import entity.ParticipantList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,23 +22,32 @@ public class FindUserAction implements Strategy {
     private static final Logger log = LoggerFactory.getLogger(FindUserAction.class);
 
     private static final String ID = "id";
+    private static final String DIRECTORY = "directory";
 
     /**
      * Find user by id
-     * @param request
-     * @param response
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        log.info("Begin search a user");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int id = Integer.parseInt(request.getParameter(ID));
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
-        factoryDao.beginTransaction();
         GenericDao genericDao = factoryDao.getDao(UserDao.class);
-        request.setAttribute("entity", genericDao.find(id));
+        factoryDao.beginTransaction();
+        try{
+            log.debug("Query execution");
+            request.setAttribute("entity", genericDao.find(id));
+        } catch (ExceptionDao e) {
+            log.error("Unable to execute query");
+            factoryDao.rollback();
+        }
         factoryDao.commit();
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        log.info("Search user completed");
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

@@ -27,39 +27,40 @@ public class CreateCourseAction implements Strategy {
 
     private static final String NAME_PARAMETER_NAME = "name";
     private static final String COURSE_DESCRIPTION_PARAMETER_NAME = "course-description";
+    public static final String TEACHER_ID = "teacher-id";
+    private static final String DIRECTORY = "directory";
 
     /**
-     * Add course
-     *
-     * @param request
-     * @param response
+     * Create a new course
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-
-        log.info("Начинаем создавать новый курс");
+        log.info("Begin to create a new course");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String courseDescription = request.getParameter(COURSE_DESCRIPTION_PARAMETER_NAME);
+        int teacherId = Integer.parseInt(request.getParameter(TEACHER_ID));
         FactoryEntity factoryEntity = FactoryEntity.getInstance();
         OptionalCourse course = (OptionalCourse) factoryEntity.getEntity(OptionalCourse.class);
         course.setName(name);
         course.setCourseDescription(courseDescription);
-        log.info("Поля курса заполнены");
+        course.setLecturer(teacherId);
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
         GenericDao genericDao = factoryDao.getDao(CourseDao.class);
         factoryDao.beginTransaction();
         try{
-            log.info("Новый курс добавлен в таблицу");
+            log.debug("Query execution");
             genericDao.create(course);
         } catch (ExceptionDao e){
-            log.error("Невозможно создать курс");
+            log.error("Unable to execute query");
             factoryDao.rollback();
         }
         factoryDao.commit();
-        log.info("Создание курса завершено");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        log.info("Course construction completed");
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

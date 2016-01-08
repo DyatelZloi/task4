@@ -1,23 +1,49 @@
 package entity;
 
-import java.sql.Clob;
-
 /**
  * Created by DiZi on 26.11.2015.
  */
 public class ParticipantList extends BaseEntity {
 
-    private long id;
-    private long idStudent;
-    private long idCourse;
+    private int id;
+    private int idStudent;
+    private int idCourse;
     private int score;
     private String shortComment;
+    private String name;
+    private String surname;
+
+    @Override
+    public String toString() {
+        return "ParticipantList{" +
+                "score=" + score +
+                ", shortComment='" + shortComment + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
     /**
      *
      * @return
      */
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -25,7 +51,7 @@ public class ParticipantList extends BaseEntity {
      *
      * @param id
      */
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -33,7 +59,7 @@ public class ParticipantList extends BaseEntity {
      *
      * @return
      */
-    public long getIdStudent() {
+    public int getIdStudent() {
         return idStudent;
     }
 
@@ -41,7 +67,7 @@ public class ParticipantList extends BaseEntity {
      *
      * @param idStudent
      */
-    public void setIdStudent(long idStudent) {
+    public void setIdStudent(int idStudent) {
         this.idStudent = idStudent;
     }
 
@@ -49,7 +75,7 @@ public class ParticipantList extends BaseEntity {
      *
      * @return
      */
-    public long getIdCourse() {
+    public int getIdCourse() {
         return idCourse;
     }
 
@@ -57,7 +83,7 @@ public class ParticipantList extends BaseEntity {
      *
      * @param idCourse
      */
-    public void setIdCourse(long idCourse) {
+    public void setIdCourse(int idCourse) {
         this.idCourse = idCourse;
     }
 

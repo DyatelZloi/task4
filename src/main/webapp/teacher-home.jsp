@@ -15,6 +15,6 @@
     <a href="find-all-students.jsp"></a>
     <a href="find-student.jsp"></a>
     <a href="WEB-INF/create-course.jsp"></a>
-    <a href="update-course.jsp"></a>
+    <a href="WEB-INF/update-course.jsp"></a>
 </body>
 </html>

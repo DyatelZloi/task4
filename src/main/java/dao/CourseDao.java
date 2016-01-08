@@ -3,6 +3,7 @@ package dao;
 import connection.PooledConnection;
 import dao.ExceptionDao;
 import entity.OptionalCourse;
+import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,45 +18,15 @@ public class CourseDao extends GenericDao<OptionalCourse> {
 
     private static final Logger log = LoggerFactory.getLogger(CourseDao.class);
 
-    /**
-     *
-     */
-    public static final String CREATE_COURSE = "INSERT INTO COURSE (ID, NAME, COURSEDESCRIPTION) VALUES (DEFAULT, ?, ?)";
-
-    /**
-     *
-     */
-    public static final String FIND_COURSE = "SELECT * FROM COURSE WHERE ID = (?)";
-
-    /**
-     *
-     */
-    public static final String DELETE_COURSE = "DELETE FROM COURSE WHERE ID = (?)";
-
-    /**
-     *
-     */
-    public static final  String UPDATE_COURSE = "UPDATE COURSE SET NAME = (?), COURSEDESCRIPTION = (?) WHERE ID = (?)";
-
-    /**
-     *
-     */
-    public  static final String FIND_ALL = "SELECT * FROM course";
-
-    /**
-     *
-     */
-    public OptionalCourse optionalCourse;
-
-    /**
-     *
-     */
+    private static final String CREATE_COURSE = "INSERT INTO course (id, name, coursedescription, idteacher) VALUES (DEFAULT, ?, ?, ?)";
+    private static final String FIND_COURSE = "SELECT * FROM course WHERE id = (?)";
+    private static final String DELETE_COURSE = "DELETE FROM course WHERE id = (?)";
+    private static final  String UPDATE_COURSE = "UPDATE course SET name = (?), coursedescription = (?) WHERE id = (?)";
+    private  static final String FIND_ALL_BY_ID_TEACHER = "SELECT * FROM course WHERE idteacher = (?)";
+    private  static final String FIND_ALL = "SELECT * FROM course";
+    private OptionalCourse optionalCourse;
     private PooledConnection connection;
-
-    /**
-     *
-     */
-    private List<OptionalCourse> list = new ArrayList<>();
+    private List list = new ArrayList();
 
     /**
      *
@@ -85,13 +56,14 @@ public class CourseDao extends GenericDao<OptionalCourse> {
             PreparedStatement ps = connection.prepareStatement(CREATE_COURSE);
             ps.setString(1, course.getName());
             ps.setString(2, course.getCourseDescription());
+            ps.setInt(3, course.getLecturer());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             long id = rs.getLong(1);
             course.setId(id);
         } catch (SQLException e) {
-            throw new ExceptionDao("Ошибка при выполнении запроса",e);
+            throw new ExceptionDao("Error executing query",e);
         }
         return course;
     }
@@ -111,7 +83,7 @@ public class CourseDao extends GenericDao<OptionalCourse> {
             ps.setInt(3, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Ошибка при выполнении запроса",e);
+            throw new ExceptionDao("Error executing query",e);
         }
         return course;
     }
@@ -132,7 +104,7 @@ public class CourseDao extends GenericDao<OptionalCourse> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return false;
     }
@@ -154,17 +126,17 @@ public class CourseDao extends GenericDao<OptionalCourse> {
                 int id2 = rs.getInt(1);
                 String name = rs.getString(2);
                 Clob courseDescription = rs.getClob(3);
-                long idLecturer = rs.getLong("ID_LECTURER");
+                int idTeacher = rs.getInt("idteacher");
                 OptionalCourse optionalCourse = new OptionalCourse();
                 optionalCourse.setId(id2);
                 optionalCourse.setName(name);
                 optionalCourse.setCourseDescription(String.valueOf(courseDescription));
-                optionalCourse.setLecturer(idLecturer);
+                optionalCourse.setLecturer(idTeacher);
                 this.optionalCourse = optionalCourse;
 
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при выполнении запроса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return  this.optionalCourse;
     }
@@ -194,7 +166,7 @@ public class CourseDao extends GenericDao<OptionalCourse> {
                 int id = rs.getInt(1);
                 String name = rs.getString(2);
                 Clob courseDescription = rs.getClob(4);
-                long idLecturer = rs.getLong("ID_LECTURER");
+                int idLecturer = rs.getInt("idteacher");
                 OptionalCourse optionalCourse = new OptionalCourse();
                 optionalCourse.setId(id);
                 optionalCourse.setName(name);
@@ -204,8 +176,39 @@ public class CourseDao extends GenericDao<OptionalCourse> {
                 list.add(optionalCourse);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("ППроблемы при выполнении запроса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return list;
+    }
+
+    @Override
+    public List<OptionalCourse> findAllBy(int idTeacher) {
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_ALL_BY_ID_TEACHER);
+            ps.setInt(1, idTeacher);
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String name = rs.getString(2);
+                Clob courseDescription = rs.getClob(3);
+                int idLecturer = rs.getInt(4);
+                OptionalCourse optionalCourse = new OptionalCourse();
+                optionalCourse.setId(id);
+                optionalCourse.setName(name);
+                optionalCourse.setCourseDescription(String.valueOf(courseDescription));
+                optionalCourse.setLecturer(idLecturer);
+                this.optionalCourse = optionalCourse;
+                list.add(optionalCourse);
+            }
+        } catch (SQLException e) {
+            throw new ExceptionDao("Error executing query", e);
+        }
+        return list;
+    }
+
+    @Override
+    public User update2(User user, int id) {
+        return null;
     }
 }

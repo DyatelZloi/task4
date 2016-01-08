@@ -20,6 +20,7 @@ public class FactoryCreateEntity extends FactoryEntity {
         BaseEntity baseEntity = null;
         try {
             baseEntity = (BaseEntity) clazz.newInstance();
+
         } catch (InstantiationException | IllegalAccessException e) {
             log.error("Ошибка при создании сущности");
             throw new FactoryException(e);

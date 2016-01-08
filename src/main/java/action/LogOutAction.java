@@ -1,5 +1,8 @@
 package action;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,14 +15,18 @@ import java.io.IOException;
  */
 public class LogOutAction implements Strategy {
 
+    private static final Logger log = LoggerFactory.getLogger(LogOutAction.class);
+
+    private static final String DIRECTORY = "directory";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         HttpSession session = request.getSession(false);
-        session.setAttribute("login", null);
-        session.setAttribute("password", null);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        session.removeAttribute("user");
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

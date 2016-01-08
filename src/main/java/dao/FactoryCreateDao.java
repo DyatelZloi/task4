@@ -14,10 +14,7 @@ public class FactoryCreateDao extends FactoryDao {
     private PooledConnection connection;
     private ConnectionPool instance;
 
-    /**
-     *
-     */
-    public static final String DRIVER_CLASS_NAME = "org.h2.Driver";
+    private static final String DRIVER_CLASS_NAME = "org.h2.Driver";
 
     /**
      *

@@ -20,42 +20,40 @@ import java.io.IOException;
  */
 public class UpdateUserAction implements Strategy {
 
-    private static final Logger log = LoggerFactory.getLogger(UpdateStudentAction.class);
+    private static final Logger log = LoggerFactory.getLogger(UpdateUserAction.class);
 
-    private static final String USER_LOGIN = "login";
-    private static final String USER_PASSWORD = "password";
+    public static final String ROLE = "role";
     private static final String ID = "id";
+    private static final String DIRECTORY = "directory";
 
     /**
-     *
-     * @param request
-     * @param response
+     * Update a user by id
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        log.info("");
-        String login = request.getParameter(USER_LOGIN);
-        String password = request.getParameter(USER_PASSWORD);
+        log.info("Begin update a user");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int id = Integer.parseInt(request.getParameter(ID));
+        String role = request.getParameter(ROLE);
         User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
+        user.setRole(role);
         user.setId(id);
-        log.info("");
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
         GenericDao genericDao = factoryDao.getDao(UserDao.class);
+        factoryDao.beginTransaction();
         try {
-            log.info("");
+            log.debug("Query execution");
             genericDao.update(user, id);
         } catch (ExceptionDao e) {
-            log.error("");
+            log.error("Unable to execute query");
             factoryDao.rollback();
         }
         factoryDao.commit();
-        log.info("");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+        log.info("User update completed");
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

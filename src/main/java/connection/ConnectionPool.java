@@ -18,43 +18,16 @@ public class ConnectionPool {
      */
     public static final ConnectionPool pool = new ConnectionPool();
 
-    /**
-     *
-     */
     private List<PooledConnection> connectionList;
-
-    /**
-     *
-     */
     private String driverClassName;
-
-    /**
-     *
-     */
     private String url;
-
-    /**
-     *
-     */
     private String userName;
-
-    /**
-     *
-     */
     private String password;
-
-    /**
-     *
-     */
     private Integer connectionNumber;
-
-    /**
-     *
-     */
     private Semaphore semaphore;
 
     /**
-     *
+     * Set driver class name
      * @param driverClassName
      */
     public void setDriverClassName(String driverClassName) {
@@ -99,13 +72,13 @@ public class ConnectionPool {
     private ConnectionPool(){}
 
     /**
-     *
+     * Initialization connections
      */
     public void initConnections (){
         try {
             Class.forName(driverClassName);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new ConnectionPoolException("Проблемы с драйвером", e);
         }
         semaphore = new Semaphore(connectionNumber);
         connectionList = new LinkedList<PooledConnection>();

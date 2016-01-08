@@ -1,5 +1,6 @@
 package action;
 
+import dao.ExceptionDao;
 import dao.FactoryDao;
 import dao.GenericDao;
 import dao.UserDao;
@@ -22,25 +23,33 @@ public class FindAllUsersAction implements Strategy {
 
     private static final Logger log = LoggerFactory.getLogger(FindCourseAction.class);
 
+    private static final String DIRECTORY = "directory";
+
     /**
      * Find all users
-     *
-     * @param request
-     * @param response
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        List<User> list = new ArrayList<>();
+        log.info("Begin search all users");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
+        List list = null;
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
-        factoryDao.beginTransaction();
         GenericDao genericDao = factoryDao.getDao(UserDao.class);
-        list = genericDao.findAll();
+        factoryDao.beginTransaction();
+        try{
+            log.debug("Query execution");
+            list = genericDao.findAll();
+        } catch (ExceptionDao e) {
+            log.error("Unable to execute query");
+            factoryDao.rollback();
+        }
         factoryDao.commit();
-        request.setAttribute("createdcourses", list);
-        //TODO
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/created-courses.jsp");
+        log.info("Search all users completed");
+        request.setAttribute("createdusers", list);
         try {
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

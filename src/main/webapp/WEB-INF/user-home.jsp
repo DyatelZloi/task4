@@ -12,23 +12,29 @@
         <title>Привет ${login}</title>
     </head>
     <body>
-        <c:if test="${role=='admin'}">
-            <a href="update-user.jsp"> Редактировать профиль </a>
+        <c:if test="${user.getRole() == 'admin'}">
+            <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=update-user">${bundle.getObject("editProfile")}</a>
             <form action="${pageContext.request.contextPath}/servlet" method="post">
                 <input type="hidden" name="action" value="find-all-users">
+                <input type="hidden" name="directory" value="created-users">
                 <button type="submit">${bundle.getObject("showAllU")}</button>
             </form>
-            <a href="find-user.jsp"> ${bundle.getObject("showU")}</a>
+            <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=find-user"> ${bundle.getObject("showU")}</a>
         </c:if>
-        <c:if test="${role=='user'}">
-            <a href="update-user.jsp"> Редактировать профиль </a>
-            2
+        <c:if test="${user.getRole() == 'user'}">
+            <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=update-user">${bundle.getObject("editProfile")}</a>
         </c:if>
-        <c:if test="${role=='teacher'}">
-            <a href="update-user.jsp"> Редактировать профиль </a>
-            <a href="create-course.jsp"> Создать курс </a>
-            <a href="update-list.jsp"> Поставить оценку </a>
-            3
+        <c:if test="${user.getRole() == 'teacher'}">
+            <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=update-user"> ${bundle.getObject("editProfile")}</a>
+            <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=create-course"> ${bundle.getObject("createcourse")}</a>
+            <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=update-list"> ${bundle.getObject("putTheEstimate")}</a>
+            <form action="${pageContext.request.contextPath}/servlet" method="post">
+                <input type="hidden" name="action" value="find-by-id-teacher">
+                <input type="hidden" name="directory" value="created-courses">
+                <input type="hidden" name="id-teacher" value="${user.getId()}">
+                <button type="submit">${bundle.getObject("viewСreatedСourses")}</button>
+            </form>
+
         </c:if>
     </body>
 </html>

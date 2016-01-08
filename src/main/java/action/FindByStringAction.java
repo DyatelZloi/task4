@@ -1,5 +1,6 @@
 package action;
 
+import dao.ExceptionDao;
 import dao.FactoryDao;
 import dao.GenericDao;
 import dao.UserDao;
@@ -22,30 +23,38 @@ public class FindByStringAction implements Strategy{
 
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
+    private static final String DIRECTORY = "directory";
 
     /**
      * Find user by string (login)
-     *
-     * @param request
-     * @param response
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        log.info("Begin log in");
+        String directory = request.getParameter(DIRECTORY);
+        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         HttpSession session = request.getSession(false);
         String login = request.getParameter(LOGIN);
         String password = request.getParameter(PASSWORD);
+        log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
-        factoryDao.beginTransaction();
         GenericDao genericDao = factoryDao.getDao(UserDao.class);
-        User user = (User) genericDao.findBy(login);
+        factoryDao.beginTransaction();
+        User user = null;
+        try{
+            log.debug("Query execution");
+            user = (User) genericDao.findBy(login);
+        } catch (ExceptionDao e) {
+            log.error("Unable to execute query");
+            factoryDao.rollback();
+        }
         factoryDao.commit();
+        log.info("Поиск завершён");
         if (user.getPassword().equals(password)){
-            request.setAttribute("entity", user);
-            session.setAttribute("login", user.getLogin());
-            session.setAttribute("role", user.getRole());
+            session.setAttribute("user", user);
         }
         try {
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }

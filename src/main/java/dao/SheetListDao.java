@@ -2,61 +2,36 @@ package dao;
 
 
 import connection.PooledConnection;
-import dao.ExceptionDao;
 import entity.ParticipantList;
+import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by DiZi on 29.11.2015.
  */
-public class ParticipantListDao extends GenericDao<ParticipantList> {
+public class SheetListDao extends GenericDao<ParticipantList> {
 
-    private static final Logger log = LoggerFactory.getLogger(ParticipantListDao.class);
+    private static final Logger log = LoggerFactory.getLogger(SheetListDao.class);
 
-    /**
-     *
-     */
-    public static final String CREATE_PARTICIPANT_LIST = "INSERT INTO StudentRegisteredForCourses (ID, ID_COURSE, ID_STUDENT, SCORE, SHORTCOMMENT) VALUES (DEFAULT, ?, ?, ?, ?)";
-
-    /**
-     *
-     */
-    public static final String FIND_PARTICIPANT_LIST = "SELECT * FROM StudentRegisteredForCourses WHERE ID = (?)";
-
-    /**
-     *
-     */
-    public static final String DELETE_PARTICIPANT_LIST = "DELETE FROM StudentRegisteredForCourses WHERE ID = (?)";
-
-    /**
-     *
-     */
-    public static final  String UPDATE_PARTICIPANT_LIST = "UPDATE StudentRegisteredForCourses SET ID_COURSE = (?), ID_STUDENT = (?), SCORE = (?), SHORTCOMMENT = (?) WHERE ID = (?)";
-
-    /**
-     *
-     */
-    public  static final String FIND_ALL = "SELECT * FROM StudentRegisteredForCourses";
-
-    /**
-     *
-     */
+    private static final String CREATE_PARTICIPANT_LIST = "INSERT INTO studentlist (id, id_course, id_user) VALUES (DEFAULT, ?, ?)";
+    private static final String FIND_PARTICIPANT_LIST = "SELECT * FROM studentlist WHERE id = (?)";
+    private static final String FIND_BY_COURSE_ID = "SELECT * FROM studentlist NATURAL JOIN user WHERE studentlist.id_course = (?)";
+    private static final String DELETE_PARTICIPANT_LIST = "DELETE FROM studentlist WHERE id = (?)";
+    private static final  String UPDATE_PARTICIPANT_LIST = "UPDATE studentlist SET score = (?), shortcomment = (?) WHERE id = (?)";
+    private  static final String FIND_ALL = "SELECT * FROM studentlist";
     private PooledConnection connection;
-
-    /**
-     *
-     */
     private ParticipantList patricipianList;
 
     /**
      *
      * @param connection
      */
-    public ParticipantListDao (PooledConnection connection){
+    public SheetListDao(PooledConnection connection){
         this.connection = connection;
     }
 
@@ -70,15 +45,13 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_PARTICIPANT_LIST);
             preparedStatement.setString(1, String.valueOf(participantList.getIdCourse()));
             preparedStatement.setString(2, String.valueOf(participantList.getIdStudent()));
-            preparedStatement.setString(3, String.valueOf(participantList.getScore()));
-            preparedStatement.setString(4, participantList.getShortComment());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
-            long id = resultSet.getLong(1);
+            int id = resultSet.getInt(1);
             participantList.setId(id);
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return participantList;
     }
@@ -91,6 +64,15 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
      */
     @Override
     public ParticipantList update(ParticipantList participantList, int id){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PARTICIPANT_LIST);
+            preparedStatement.setString(1, String.valueOf(participantList.getScore()));
+            preparedStatement.setString(2, participantList.getShortComment());
+            preparedStatement.setString(3, String.valueOf(id));
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new ExceptionDao("Error executing query", e);
+        }
         return participantList;
     }
 
@@ -109,7 +91,7 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return false;
     }
@@ -128,7 +110,7 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return null;
     }
@@ -160,7 +142,7 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
                 int idStudent = rs.getInt(3);
                 int score = rs.getInt(4);
                 String shortComment = String.valueOf(rs.getClob(5));
-                long idLecturer = rs.getLong("ID_LECTURER");
+                long idLecturer = rs.getLong("idteacher");
                 patricipianList = new ParticipantList();
                 patricipianList.setId(id);
                 patricipianList.setIdCourse(idCourse);
@@ -170,8 +152,45 @@ public class ParticipantListDao extends GenericDao<ParticipantList> {
                 list.add(patricipianList);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Проблемы при создании курса", e);
+            throw new ExceptionDao("Error executing query", e);
         }
         return list;
+    }
+
+    @Override
+    public List<ParticipantList> findAllBy(int course) {
+        List list = new ArrayList();
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_BY_COURSE_ID);
+            ps.setInt(1, course);
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                int idCourse = rs.getInt(2);
+                int idStudent = rs.getInt(3);
+                int score = rs.getInt(4);
+                String shortComment = String.valueOf(rs.getClob(5));
+                String name = rs.getString(10);
+                String surname = rs.getString(11);
+                patricipianList = new ParticipantList();
+                patricipianList.setId(id);
+                patricipianList.setIdCourse(idCourse);
+                patricipianList.setIdStudent(idStudent);
+                patricipianList.setScore(score);
+                patricipianList.setShortComment(shortComment);
+                patricipianList.setName(name);
+                patricipianList.setSurname(surname);
+                list.add(patricipianList);
+            }
+        } catch (SQLException e) {
+            throw new ExceptionDao("Error executing query", e);
+        }
+        return list;
+    }
+
+    @Override
+    public User update2(User user, int id) {
+        return null;
     }
 }
