@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 03.12.2015.
+ * Created by Malkov Nikifor on 03.12.2015.
  */
 @WebFilter(filterName = "FilterEncodings", urlPatterns = "/*")
 public class FilterEncodings implements Filter {
@@ -22,6 +22,7 @@ public class FilterEncodings implements Filter {
      */
     @Override
     public void destroy() {
+        log.info("Encodings filter destroyed");
     }
 
     /**
@@ -30,6 +31,7 @@ public class FilterEncodings implements Filter {
      */
     @Override
     public void init(FilterConfig filterConfig) {
+        log.info("Encodings filter started");
     }
 
     /**

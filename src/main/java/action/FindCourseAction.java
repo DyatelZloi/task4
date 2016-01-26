@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 10.12.2015.
+ * Created by Malkov Nikifor on 10.12.2015.
  */
 public class FindCourseAction implements Strategy {
 
@@ -48,14 +48,14 @@ public class FindCourseAction implements Strategy {
             log.error("Unable to execute query");
             factoryDao.rollback();
         }
-
         factoryDao.commit();
         log.info("Search course completed");
         request.setAttribute("createdcourses", optionalCourse);
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

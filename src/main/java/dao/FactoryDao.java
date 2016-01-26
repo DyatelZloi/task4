@@ -2,7 +2,7 @@ package dao;
 
 
 /**
- * Created by DiZi on 01.12.2015.
+ * Created by Malkov Nikifor on 01.12.2015.
  */
 public abstract class FactoryDao {
 

@@ -1,5 +1,6 @@
 package action;
 
+import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Created by DiZi on 30.12.2015.
+ * Created by Malkov Nikifor on 30.12.2015.
  */
 public class LogOutAction implements Strategy {
 
@@ -24,11 +25,16 @@ public class LogOutAction implements Strategy {
         String directory = request.getParameter(DIRECTORY);
         String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         HttpSession session = request.getSession(false);
-        session.removeAttribute("user");
+        User user = new User();
+        user.setLogin("guest");
+        user.setPassword("guest");
+        user.setRole("guest");
+        session.setAttribute("user", user);
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

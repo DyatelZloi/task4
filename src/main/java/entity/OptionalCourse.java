@@ -1,7 +1,7 @@
 package entity;
 
 /**
- * Created by DiZi on 25.11.2015.
+ * Created by Malkov Nikifor on 25.11.2015.
  */
 public class OptionalCourse extends BaseEntity{
 

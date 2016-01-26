@@ -1,18 +1,14 @@
 package dao;
 
-import connection.PooledConnection;
 import entity.BaseEntity;
-import entity.User;
+
 
 import java.util.List;
 
 /**
- * Created by DiZi on 03.12.2015.
+ * Created by Malkov Nikifor on 03.12.2015.
  */
 public abstract class GenericDao<T extends BaseEntity>{
-
-    public GenericDao(PooledConnection connection){
-    }
 
     public GenericDao() {
     }
@@ -29,7 +25,9 @@ public abstract class GenericDao<T extends BaseEntity>{
 
     public abstract List<T> findAll();
 
-    public abstract List<T> findAllBy(int string);
+    public abstract List<T> findAllBy(int id);
 
-    public abstract User update2(User user, int id);
+    public abstract T update2(T t, int id);
+
+    public abstract List<T> findAllBy(long id);
 }

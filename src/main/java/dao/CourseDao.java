@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by DiZi on 25.11.2015.
+ * Created by Malkov Nikifor on 25.11.2015.
  */
 public class CourseDao extends GenericDao<OptionalCourse> {
 
@@ -63,7 +63,8 @@ public class CourseDao extends GenericDao<OptionalCourse> {
             long id = rs.getLong(1);
             course.setId(id);
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query",e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return course;
     }
@@ -83,7 +84,8 @@ public class CourseDao extends GenericDao<OptionalCourse> {
             ps.setInt(3, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query",e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return course;
     }
@@ -104,8 +106,8 @@ public class CourseDao extends GenericDao<OptionalCourse> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
-        }
+            log.error("Error executing query");
+            throw new ExceptionDao(e);}
         return false;
     }
 
@@ -136,7 +138,8 @@ public class CourseDao extends GenericDao<OptionalCourse> {
 
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return  this.optionalCourse;
     }
@@ -176,7 +179,8 @@ public class CourseDao extends GenericDao<OptionalCourse> {
                 list.add(optionalCourse);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return list;
     }
@@ -202,13 +206,19 @@ public class CourseDao extends GenericDao<OptionalCourse> {
                 list.add(optionalCourse);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return list;
     }
 
     @Override
-    public User update2(User user, int id) {
+    public OptionalCourse update2(OptionalCourse course, int id) {
+        return null;
+    }
+
+    @Override
+    public List<OptionalCourse> findAllBy(long id) {
         return null;
     }
 }

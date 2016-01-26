@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by DiZi on 29.11.2015.
+ * Created by Malkov Nikifor on 29.11.2015.
  */
 public class UserDao extends GenericDao<User> {
 
     private static final Logger log = LoggerFactory.getLogger(UserDao.class);
     private static  final String FIND_USER = "SELECT * FROM user WHERE id_user = (?)";
-    private static final String CREATE_USER = "INSERT INTO user (id_user, login, password) VALUES (DEFAULT, ?, ?)";
+    private static final String CREATE_USER = "INSERT INTO user (id_user, login, password, role) VALUES (DEFAULT, ?, ?, ?)";
     private static final String DELETE_USER = "DELETE FROM user WHERE id_user = (?)";
     private static final  String UPDATE_USER = "UPDATE user SET login = (?), password = (?), email = (?), name = (?), surname = (?) WHERE id_user = (?)";
     private static final  String SET_ROLE = "UPDATE user SET role = (?) WHERE id_user = (?)";
@@ -50,13 +50,15 @@ public class UserDao extends GenericDao<User> {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USER);
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, "user");
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             int id = resultSet.getInt(1);
             user.setId(id);
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return user;
     }
@@ -76,7 +78,8 @@ public class UserDao extends GenericDao<User> {
             ps.setString(2, String.valueOf(user.getId()));
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query",e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return user;
     }
@@ -92,9 +95,15 @@ public class UserDao extends GenericDao<User> {
             ps.setString(6, String.valueOf(id));
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query",e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return user;
+    }
+
+    @Override
+    public List<User> findAllBy(long id) {
+        return null;
     }
 
     /**
@@ -120,7 +129,8 @@ public class UserDao extends GenericDao<User> {
                 user.setPassword(password);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return user;
     }
@@ -154,7 +164,8 @@ public class UserDao extends GenericDao<User> {
                 user.setSurname(surname);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return user;
     }
@@ -190,7 +201,8 @@ public class UserDao extends GenericDao<User> {
                 list.add(user);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return list;
     }
@@ -217,7 +229,8 @@ public class UserDao extends GenericDao<User> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return false;
     }

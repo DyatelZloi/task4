@@ -1,7 +1,7 @@
 package action;
 
 /**
- * Created by DiZi on 13.12.2015.
+ * Created by Malkov Nikifor on 13.12.2015.
  */
 public class ExceptionAction extends RuntimeException {
 

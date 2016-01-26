@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by DiZi on 30.12.2015.
+ * Created by Malkov Nikifor on 30.12.2015.
  */
 public class MoveToAction implements Strategy {
 
@@ -24,7 +24,8 @@ public class MoveToAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

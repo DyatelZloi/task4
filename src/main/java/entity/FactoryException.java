@@ -1,7 +1,7 @@
 package entity;
 
 /**
- * Created by DiZi on 30.12.2015.
+ * Created by Malkov Nikifor on 30.12.2015.
  */
 public class FactoryException extends RuntimeException {
 

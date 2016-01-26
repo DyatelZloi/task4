@@ -2,7 +2,7 @@ package dao;
 
 
 import connection.PooledConnection;
-import entity.ParticipantList;
+import entity.SheetList;
 import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by DiZi on 29.11.2015.
+ * Created by Malkov Nikifor on 29.11.2015.
  */
-public class SheetListDao extends GenericDao<ParticipantList> {
+public class SheetListDao extends GenericDao<SheetList> {
 
     private static final Logger log = LoggerFactory.getLogger(SheetListDao.class);
 
@@ -24,8 +24,9 @@ public class SheetListDao extends GenericDao<ParticipantList> {
     private static final String DELETE_PARTICIPANT_LIST = "DELETE FROM studentlist WHERE id = (?)";
     private static final  String UPDATE_PARTICIPANT_LIST = "UPDATE studentlist SET score = (?), shortcomment = (?) WHERE id = (?)";
     private  static final String FIND_ALL = "SELECT * FROM studentlist";
+    private static final String FIND_BY_STUDENT_ID = "SELECT * FROM studentlist JOIN course WHERE  course.id = studentlist.id_course AND studentlist.id_user = (?)";
     private PooledConnection connection;
-    private ParticipantList patricipianList;
+    private SheetList patricipianList;
 
     /**
      *
@@ -37,43 +38,45 @@ public class SheetListDao extends GenericDao<ParticipantList> {
 
     /**
      *
-     * @param participantList
+     * @param sheetList
      * @return
      */
-    public ParticipantList create (ParticipantList participantList){
+    public SheetList create (SheetList sheetList){
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(CREATE_PARTICIPANT_LIST);
-            preparedStatement.setString(1, String.valueOf(participantList.getIdCourse()));
-            preparedStatement.setString(2, String.valueOf(participantList.getIdStudent()));
+            preparedStatement.setString(1, String.valueOf(sheetList.getIdCourse()));
+            preparedStatement.setString(2, String.valueOf(sheetList.getIdStudent()));
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
             int id = resultSet.getInt(1);
-            participantList.setId(id);
+            sheetList.setId(id);
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
-        return participantList;
+        return sheetList;
     }
 
     /**
      *
-     * @param participantList
+     * @param sheetList
      * @param id
      * @return
      */
     @Override
-    public ParticipantList update(ParticipantList participantList, int id){
+    public SheetList update(SheetList sheetList, int id){
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PARTICIPANT_LIST);
-            preparedStatement.setString(1, String.valueOf(participantList.getScore()));
-            preparedStatement.setString(2, participantList.getShortComment());
+            preparedStatement.setString(1, String.valueOf(sheetList.getScore()));
+            preparedStatement.setString(2, sheetList.getShortComment());
             preparedStatement.setString(3, String.valueOf(id));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
-        return participantList;
+        return sheetList;
     }
 
     /**
@@ -91,12 +94,11 @@ public class SheetListDao extends GenericDao<ParticipantList> {
                 return true;
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return false;
     }
-
-    //TODO сделать джойны, чтобы можно было посмотреть к кому относится.
 
     /**
      *
@@ -104,13 +106,14 @@ public class SheetListDao extends GenericDao<ParticipantList> {
      * @return
      */
     @Override
-    public ParticipantList find(int id) {
+    public SheetList find(int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_PARTICIPANT_LIST);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return null;
     }
@@ -121,7 +124,7 @@ public class SheetListDao extends GenericDao<ParticipantList> {
      * @return
      */
     @Override
-    public ParticipantList findBy(String string) {
+    public SheetList findBy(String string) {
         return null;
     }
 
@@ -130,8 +133,8 @@ public class SheetListDao extends GenericDao<ParticipantList> {
      * @return
      */
     @Override
-    public List<ParticipantList> findAll() {
-        List<ParticipantList> list = null;
+    public List<SheetList> findAll() {
+        List<SheetList> list = null;
         try {
             PreparedStatement ps = connection.prepareStatement(FIND_ALL);
             ps.execute();
@@ -142,8 +145,7 @@ public class SheetListDao extends GenericDao<ParticipantList> {
                 int idStudent = rs.getInt(3);
                 int score = rs.getInt(4);
                 String shortComment = String.valueOf(rs.getClob(5));
-                long idLecturer = rs.getLong("idteacher");
-                patricipianList = new ParticipantList();
+                patricipianList = new SheetList();
                 patricipianList.setId(id);
                 patricipianList.setIdCourse(idCourse);
                 patricipianList.setIdStudent(idStudent);
@@ -152,13 +154,14 @@ public class SheetListDao extends GenericDao<ParticipantList> {
                 list.add(patricipianList);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return list;
     }
 
     @Override
-    public List<ParticipantList> findAllBy(int course) {
+    public List<SheetList> findAllBy(int course) {
         List list = new ArrayList();
         try {
             PreparedStatement ps = connection.prepareStatement(FIND_BY_COURSE_ID);
@@ -173,7 +176,7 @@ public class SheetListDao extends GenericDao<ParticipantList> {
                 String shortComment = String.valueOf(rs.getClob(5));
                 String name = rs.getString(10);
                 String surname = rs.getString(11);
-                patricipianList = new ParticipantList();
+                patricipianList = new SheetList();
                 patricipianList.setId(id);
                 patricipianList.setIdCourse(idCourse);
                 patricipianList.setIdStudent(idStudent);
@@ -184,13 +187,45 @@ public class SheetListDao extends GenericDao<ParticipantList> {
                 list.add(patricipianList);
             }
         } catch (SQLException e) {
-            throw new ExceptionDao("Error executing query", e);
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
         }
         return list;
     }
 
     @Override
-    public User update2(User user, int id) {
+    public List<SheetList> findAllBy(long id_student) {
+        List list = new ArrayList();
+        try {
+            PreparedStatement ps = connection.prepareStatement(FIND_BY_STUDENT_ID);
+            ps.setLong(1, id_student);
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                int idCourse = rs.getInt(2);
+                int idStudent = rs.getInt(3);
+                int score = rs.getInt(4);
+                String shortComment = rs.getString(5);
+                String courseName = rs.getString(7);
+                patricipianList = new SheetList();
+                patricipianList.setId(id);
+                patricipianList.setIdCourse(idCourse);
+                patricipianList.setIdStudent(idStudent);
+                patricipianList.setScore(score);
+                patricipianList.setShortComment(shortComment);
+                patricipianList.setCourseName(courseName);
+                list.add(patricipianList);
+            }
+        } catch (SQLException e) {
+            log.error("Error executing query");
+            throw new ExceptionDao(e);
+        }
+        return list;
+    }
+
+    @Override
+    public SheetList update2(SheetList sheetList, int id) {
         return null;
     }
 }

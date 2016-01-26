@@ -1,7 +1,7 @@
 package dao;
 
 /**
- * Created by DiZi on 30.12.2015.
+ * Created by Malkov Nikifor on 30.12.2015.
  */
 public class ExceptionDao extends RuntimeException {
 

@@ -18,13 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 07.12.2015.
+ * Created by Malkov Nikifor on 07.12.2015.
  */
 public class CreateUserAction implements Strategy {
 
     private static final Logger log = LoggerFactory.getLogger(CreateUserAction.class);
 
-    //TODO вынести в проперти?!
     private static final String USER_LOGIN = "login";
     private static final String USER_PASSWORD = "password";
     private static final String DIRECTORY = "directory";
@@ -58,7 +57,8 @@ public class CreateUserAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 02.12.2015.
+ * Created by Malkov Nikifor on 02.12.2015.
  */
 public class CreateCourseAction implements Strategy {
 
@@ -27,7 +27,7 @@ public class CreateCourseAction implements Strategy {
 
     private static final String NAME_PARAMETER_NAME = "name";
     private static final String COURSE_DESCRIPTION_PARAMETER_NAME = "course-description";
-    public static final String TEACHER_ID = "teacher-id";
+    private static final String TEACHER_ID = "teacher-id";
     private static final String DIRECTORY = "directory";
 
     /**
@@ -62,7 +62,8 @@ public class CreateCourseAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

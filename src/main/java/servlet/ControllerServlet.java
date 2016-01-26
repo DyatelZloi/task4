@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 24.11.2015.
+ * Created by Malkov Nikifor on 24.11.2015.
  */
 public class ControllerServlet extends HttpServlet {
 
@@ -36,14 +36,14 @@ public class ControllerServlet extends HttpServlet {
         try {
             context.setStrategy(actionName);
         } catch (IllegalAccessException | InstantiationException e) {
-            log.error("Ошибка при создании события");
-            throw new ExceptionAction(e);
+            log.error("Error when creating events");
+            throw new ExceptionServlet(e);
         }
         try {
             context.executeStrategy(request,response);
         } catch (ServletException | IOException e) {
-            log.error("Ошибка при выполнении события");
-            throw new ExceptionAction(e);
+            log.error("Error executing action");
+            throw new ExceptionServlet(e);
         }
     }
 }

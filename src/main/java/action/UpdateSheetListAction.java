@@ -1,7 +1,7 @@
 package action;
 
 import dao.*;
-import entity.ParticipantList;
+import entity.SheetList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 10.12.2015.
+ * Created by Malkov Nikifor on 10.12.2015.
  */
 public class UpdateSheetListAction implements Strategy {
 
@@ -34,16 +34,16 @@ public class UpdateSheetListAction implements Strategy {
         int score = Integer.parseInt(request.getParameter(SCORE));
         String shortComment = request.getParameter(SHORT_COMMENT);
         int id = Integer.parseInt(request.getParameter(ID));
-        ParticipantList participantList = new ParticipantList();
-        participantList.setScore(score);
-        participantList.setShortComment(shortComment);
+        SheetList sheetList = new SheetList();
+        sheetList.setScore(score);
+        sheetList.setShortComment(shortComment);
         log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
         factoryDao.beginTransaction();
         GenericDao genericDao = factoryDao.getDao(SheetListDao.class);
         try{
             log.debug("Query execution");
-            genericDao.update(participantList, id);
+            genericDao.update(sheetList, id);
         } catch (ExceptionDao e) {
             log.error("Unable to execute query");
             factoryDao.rollback();
@@ -52,7 +52,8 @@ public class UpdateSheetListAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

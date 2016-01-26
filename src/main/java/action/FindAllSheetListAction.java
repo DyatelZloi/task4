@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by DiZi on 25.12.2015.
+ * Created by Malkov Nikifor on 25.12.2015.
  */
 public class FindAllSheetListAction implements Strategy {
 
@@ -48,7 +48,8 @@ public class FindAllSheetListAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

@@ -11,25 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 02.12.2015.
+ * Created by Malkov Nikifor on 02.12.2015.
  */
 public class Action {
 
     private static final Logger log = LoggerFactory.getLogger(Action.class);
 
-        //TODO переименовать, имя не подхожящее
-
     private Strategy strategy;
     private Map map = new HashMap<String, Strategy>();
-
 
     /**
      * Заполнение мапы
      */
     private void any () {
-
-        //TODO переименуй, чтобы было более систематизировано
-        // тут всё на нашей совести, осторожно
 
         map.put("create-course", new CreateCourseAction());
         map.put("create-list", new CreateSheetListAction());
@@ -52,6 +46,7 @@ public class Action {
         map.put("log-in", new FindByStringAction());
         map.put("find-by-id-teacher", new FindByIdTeacherAction());
         map.put("find-by-id-course", new FindAllByCourseId());
+        map.put("find-by-all-id-user", new FindAllByUserIdAction());
 
         map.put("find-all-courses", new FindAllCourseAction());
         map.put("find-all-users", new FindAllUsersAction());

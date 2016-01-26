@@ -4,7 +4,7 @@ import dao.ExceptionDao;
 import dao.FactoryDao;
 import dao.GenericDao;
 import dao.SheetListDao;
-import entity.ParticipantList;
+import entity.SheetList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 02.12.2015.
+ * Created by Malkov Nikifor on 02.12.2015.
  */
 public class CreateSheetListAction implements Strategy {
 
@@ -35,16 +35,16 @@ public class CreateSheetListAction implements Strategy {
         String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int idStudent = Integer.parseInt(request.getParameter(STUDENT_ID));
         int idCourse = Integer.parseInt(request.getParameter(COURSE_ID));
-        ParticipantList participantList = new ParticipantList();
-        participantList.setIdCourse(idCourse);
-        participantList.setIdStudent(idStudent);
+        SheetList sheetList = new SheetList();
+        sheetList.setIdCourse(idCourse);
+        sheetList.setIdStudent(idStudent);
         log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
         GenericDao genericDao = factoryDao.getDao(SheetListDao.class);
         factoryDao.beginTransaction();
         try{
             log.debug("Query execution");
-            genericDao.create(participantList);
+            genericDao.create(sheetList);
         } catch (ExceptionDao e){
             log.error("Unable to execute query");
             factoryDao.rollback();
@@ -54,7 +54,8 @@ public class CreateSheetListAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

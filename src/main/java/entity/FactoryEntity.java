@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 30.12.2015.
+ * Created by Malkov Nikifor on 30.12.2015.
  */
 public abstract class FactoryEntity {
 

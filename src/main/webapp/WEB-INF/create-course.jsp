@@ -1,15 +1,15 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%--
   Created by IntelliJ IDEA.
-  User: DiZi
+  User: Malkov Nikifor
   Date: 25.11.2015
   Time: 11:53
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-    <head>
-        <title>Create course</title>
-    </head>
+    <t:head title="Привет ${user.getLogin()}"/>
     <body>
         <form action="${pageContext.request.contextPath}/servlet" method="post">
             <input type="hidden" name="action" value="create-course">

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Created by DiZi on 06.01.2016.
+ * Created by Malkov Nikifor on 06.01.2016.
  */
 public class UpdateUserAction2 implements Strategy {
 
@@ -61,7 +61,7 @@ public class UpdateUserAction2 implements Strategy {
             HttpSession session = request.getSession(false);
             session.setAttribute("user", user);
         } catch (ExceptionDao e) {
-            log.error("Ошибка при выполнении запроса");
+            log.error("Error executing query");
             factoryDao.rollback();
         }
         factoryDao.commit();
@@ -69,7 +69,8 @@ public class UpdateUserAction2 implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

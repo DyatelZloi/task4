@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by DiZi on 05.01.2016.
+ * Created by Malkov Nikifor on 05.01.2016.
  */
 public class FindByIdTeacherAction implements Strategy{
 
@@ -49,7 +49,8 @@ public class FindByIdTeacherAction implements Strategy{
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

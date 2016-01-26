@@ -1,7 +1,7 @@
 package connection;
 
 /**
- * Created by DiZi on 29.11.2015.
+ * Created by Malkov Nikifor on 29.11.2015.
  */
 public class ConnectionPoolException extends RuntimeException{
 

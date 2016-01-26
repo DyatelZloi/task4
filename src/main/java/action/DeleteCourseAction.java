@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 10.12.2015.
+ * Created by Malkov Nikifor on 10.12.2015.
  */
 public class DeleteCourseAction implements Strategy {
 
@@ -48,7 +48,8 @@ public class DeleteCourseAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

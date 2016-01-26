@@ -9,12 +9,12 @@ import dao.ExceptionDao;
 import dao.FactoryDao;
 import dao.GenericDao;
 import dao.SheetListDao;
-import entity.ParticipantList;
+import entity.SheetList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 10.12.2015.
+ * Created by Malkov Nikifor on 10.12.2015.
  */
 public class FindSheetListAction implements Strategy {
 
@@ -36,21 +36,22 @@ public class FindSheetListAction implements Strategy {
         FactoryDao factoryDao = FactoryDao.getInstance();
         GenericDao genericDao = factoryDao.getDao(SheetListDao.class);
         factoryDao.beginTransaction();
-        ParticipantList participantList = null;
+        SheetList sheetList = null;
         try{
             log.debug("Query execution");
-            participantList = (ParticipantList) genericDao.find(id);
+            sheetList = (SheetList) genericDao.find(id);
         } catch (ExceptionDao e) {
             log.error("Unable to execute query");
             factoryDao.rollback();
         }
         factoryDao.commit();
         log.info("Search sheet list completed");
-        request.setAttribute("entity", participantList);
+        request.setAttribute("entity", sheetList);
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

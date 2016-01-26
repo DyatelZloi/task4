@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 30.12.2015.
+ * Created by Malkov Nikifor on 30.12.2015.
  */
 public class FactoryCreateEntity extends FactoryEntity {
 
@@ -22,7 +22,7 @@ public class FactoryCreateEntity extends FactoryEntity {
             baseEntity = (BaseEntity) clazz.newInstance();
 
         } catch (InstantiationException | IllegalAccessException e) {
-            log.error("Ошибка при создании сущности");
+            log.error("Error creating entity");
             throw new FactoryException(e);
         }
         return baseEntity;

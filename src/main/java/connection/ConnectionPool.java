@@ -1,5 +1,8 @@
 package connection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,16 +11,12 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
- * Created by DiZi on 29.11.2015.
+ * Created by Malkov Nikifor on 29.11.2015.
  */
 public class ConnectionPool {
-    //TODO внести некоторые корректировки (переделай)
 
-    /**
-     *
-     */
-    public static final ConnectionPool pool = new ConnectionPool();
-
+    private static final Logger log = LoggerFactory.getLogger(ConnectionPool.class);
+    private static final ConnectionPool pool = new ConnectionPool();
     private List<PooledConnection> connectionList;
     private String driverClassName;
     private String url;
@@ -78,7 +77,8 @@ public class ConnectionPool {
         try {
             Class.forName(driverClassName);
         } catch (ClassNotFoundException e) {
-            throw new ConnectionPoolException("Проблемы с драйвером", e);
+            log.error("Impossible to find driver");
+            throw new ConnectionPoolException(e);
         }
         semaphore = new Semaphore(connectionNumber);
         connectionList = new LinkedList<PooledConnection>();
@@ -88,7 +88,8 @@ public class ConnectionPool {
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionList.add(pooledConnection);
             } catch (SQLException e) {
-                throw new ConnectionPoolException("Проблемы с конекшеном", e);
+                log.error("SQL error");
+                throw new ConnectionPoolException(e);
             }
         }
     }
@@ -110,14 +111,15 @@ public class ConnectionPool {
             semaphore.acquire();
             return connectionList.remove(0);
         } catch (InterruptedException e) {
-            throw new ConnectionPoolException("Проблемы с конекшеном", e);
+            log.error("The problems with connections");
+            throw new ConnectionPoolException(e);
         }
     }
 
     /**
      *
      */
-    public void CloseConnection (){
+    public void closeConnection (){
         int realeseNumber = connectionNumber - semaphore.availablePermits();
         semaphore.release(realeseNumber);
     }

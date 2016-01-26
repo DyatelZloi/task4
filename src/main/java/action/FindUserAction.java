@@ -1,6 +1,5 @@
 package action;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,12 +9,11 @@ import dao.ExceptionDao;
 import dao.GenericDao;
 import dao.FactoryDao;
 import dao.UserDao;
-import entity.ParticipantList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by DiZi on 10.12.2015.
+ * Created by Malkov Nikifor on 10.12.2015.
  */
 public class FindUserAction implements Strategy {
 
@@ -49,7 +47,8 @@ public class FindUserAction implements Strategy {
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by DiZi on 05.01.2016.
+ * Created by Malkov Nikifor on 05.01.2016.
  */
 public class FindAllByCourseId implements Strategy{
 
@@ -45,12 +45,13 @@ public class FindAllByCourseId implements Strategy{
             factoryDao.rollback();
         }
         factoryDao.commit();
-        log.info("Поиск завершён");
+        log.info("Search completed");
         request.setAttribute("liststudents", list);
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 

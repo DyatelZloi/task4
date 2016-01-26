@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * Created by DiZi on 17.12.2015.
+ * Created by Malkov Nikifor on 17.12.2015.
  */
 public class FindByStringAction implements Strategy{
 
@@ -49,14 +49,15 @@ public class FindByStringAction implements Strategy{
             factoryDao.rollback();
         }
         factoryDao.commit();
-        log.info("Поиск завершён");
+        log.info("Search completed");
         if (user.getPassword().equals(password)){
             session.setAttribute("user", user);
         }
         try {
             request.getRequestDispatcher(moveDirectory).forward(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
+            log.error("Error when redirecting");
+            throw new ExceptionAction(e);
         }
     }
 }
