@@ -1,7 +1,6 @@
 package dao;
 
 import connection.ConnectionPool;
-import connection.MyConnectionPool;
 import connection.PooledConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +21,13 @@ public class FactoryCreateDao extends FactoryDao {
     /**
      *
      */
-    //todo  вынести в проперти
     public FactoryCreateDao(){
         instance = ConnectionPool.getInstance();
         instance.setDriverClassName(DRIVER_CLASS_NAME);
         instance.setUserName("GOD");
         instance.setPassword("GOD");
         instance.setUrl("jdbc:h2:~/course;AUTO_SERVER=TRUE");
-        instance.setConnectionNumber(4);
+        instance.setConnectionNumber(2);
         instance.initConnections();
         connection = instance.getConnection();
     }
@@ -95,6 +93,6 @@ public class FactoryCreateDao extends FactoryDao {
      */
     @Override
     public void close() {
-        instance.closeConnection();
+        instance.closeConnection(connection);
     }
 }
