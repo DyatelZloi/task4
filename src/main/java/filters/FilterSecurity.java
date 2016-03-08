@@ -47,7 +47,7 @@ public class FilterSecurity implements Filter {
         if(session != null) {
             session.setAttribute("bundle", bundle);
             user = (User) session.getAttribute("user");
-            String containKey = request.getParameter("action") + request.getParameter("directory");
+            String containKey = request.getParameter("action");
                 if (!map.containsKey(containKey) | !checkRole(map.get(containKey), user.getRole())){
                     response.sendRedirect("/servlet?action=move-to&directory=sign-up");
                     return;
@@ -74,33 +74,25 @@ public class FilterSecurity implements Filter {
 
         bundle = ResourceBundle.getBundle("words");
 
-        map.put("find-all-coursesfind-all-course-g", "user-guest-admin-teacher");
-        map.put("move-tolog-out", "user-admin-teacher");
-        map.put("move-tolog-in", "guest-teacher-admin-user");
-        map.put("log-inindex", "guest-teacher-admin-user");
-        map.put("move-toindex", "guest-teacher-admin-user");
-        map.put("log-in-null", "guest-teacher-admin-user");
-        map.put("move-touser-home", "teacher-admin-user");
-        map.put("move-toupdate-user", "teacher-admin-user");
-        map.put("update-user-2update-user", "teacher-admin-user");
-        map.put("find-all-coursefind-all-course-g", "user-guest-admin-teacher");
+        map.put("find-all-courses", "user-guest-admin-teacher");
+        map.put("move-to", "guest-teacher-admin-user");
+        map.put("log-in", "guest-teacher-admin-user");
+        map.put("update-user-2", "teacher-admin-user");
+        map.put("find-all-course", "user-guest-admin-teacher");
         map.put("update-user-update-user", "admin");
-        map.put("move-tosign-up", "guest");
-        map.put("move-tocreate-course", "teacher");
-        map.put("create-courseindex", "teacher");
-        map.put("find-by-id-teachercreated-courses", "teacher");
-        map.put("update-courseindex", "teacher");
-        map.put("course-deleteindex", "teacher");
-        map.put("find-by-id-teachercreated-courses", "teacher");
-        map.put("find-by-id-courseregistred-students", "teacher");
-        map.put("update-listindex", "teacher");
-        map.put("find-all-userscreated-users", "admin");
-        map.put("update-userindex", "admin");
-        map.put("delete-userindex", "admin");
-        map.put("log-outindex","user-admin-teacher");
-        map.put("find-by-all-id-usersheet-registrations", "user");
-        map.put("move-toregistration", "user-admin-teacher-guest");
-        map.put("registrationindex", "user-admin-teacher-guest");
+        map.put("create-course", "teacher");
+        map.put("find-by-id-teacher", "teacher");
+        map.put("update-course", "teacher");
+        map.put("course-delete", "teacher");
+        map.put("find-by-id-teacher", "teacher");
+        map.put("find-by-id-course", "teacher");
+        map.put("update-list", "teacher");
+        map.put("find-all-users", "admin");
+        map.put("update-user", "admin");
+        map.put("delete-user", "admin");
+        map.put("log-out","user-admin-teacher");
+        map.put("find-by-all-id-user", "user");
+        map.put("registration", "user-admin-teacher-guest");
     }
 
     /**

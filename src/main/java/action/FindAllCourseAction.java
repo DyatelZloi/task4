@@ -26,16 +26,14 @@ public class FindAllCourseAction implements Strategy {
      */
     private static final Logger log = LoggerFactory.getLogger(FindCourseAction.class);
 
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/find-all-course-g.jsp";
 
     /**
      * Find all courses
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin search all courses");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         List list = null;
         log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
@@ -51,11 +49,6 @@ public class FindAllCourseAction implements Strategy {
         factoryDao.commit();
         log.info("Search all course completed");
         request.setAttribute("en", list);
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

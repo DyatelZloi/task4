@@ -22,16 +22,14 @@ public class FindAllByUserIdAction implements Strategy {
     private static final Logger log = LoggerFactory.getLogger(FindAllByUserIdAction.class);
 
     private static final String ID = "id-user";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/sheet-registrations.jsp";
 
     /**
      * Find a registered student by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin search a sheet registration");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         long id = Long.parseLong(request.getParameter(ID));
         log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
@@ -48,11 +46,6 @@ public class FindAllByUserIdAction implements Strategy {
         factoryDao.commit();
         log.info("Search sheet list completed");
         request.setAttribute("entity", sheetList);
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

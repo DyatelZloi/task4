@@ -31,7 +31,7 @@ public class FindCourseAction implements Strategy {
      * Find course by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin search a course");
         String directory = request.getParameter(DIRECTORY);
         String moveDirectory = "/WEB-INF/" + directory + ".jsp";
@@ -51,11 +51,6 @@ public class FindCourseAction implements Strategy {
         factoryDao.commit();
         log.info("Search course completed");
         request.setAttribute("createdcourses", optionalCourse);
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return moveDirectory;
     }
 }

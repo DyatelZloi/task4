@@ -16,7 +16,6 @@
             <a href=""> Поставить оценку и оставить отзыв </a>
             <form action="${pageContext.request.contextPath}/servlet" method="post">
                 <input type="hidden" name="action" value="update-list">
-                <input type="hidden" name="directory" value="index">
                 <input type="hidden" name="id" value="${student.getId()}">
                 <input type="text" name="name" id="name" value="${student.getName()}">
                 <input type="text" name="surname"  id="surname" value="${student.getSurname()}">

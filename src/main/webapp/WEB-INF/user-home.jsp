@@ -19,7 +19,6 @@
             <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=update-user">${bundle.getObject("editProfile")}</a>
             <form action="${pageContext.request.contextPath}/servlet" method="post">
                 <input type="hidden" name="action" value="find-all-users">
-                <input type="hidden" name="directory" value="created-users">
                 <button type="submit">${bundle.getObject("showAllU")}</button>
             </form>
             <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=find-user"> ${bundle.getObject("showU")}</a>
@@ -28,7 +27,6 @@
             <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=update-user">${bundle.getObject("editProfile")}</a>
             <form action="${pageContext.request.contextPath}/servlet" method="post">
                 <input type="hidden" name="action" value="find-by-all-id-user">
-                <input type="hidden" name="directory" value="sheet-registrations">
                 <input type="hidden" name="id-user" value="${user.getId()}">
                 <button type="submit">${bundle.getObject("viewScore")}</button>
             </form>
@@ -39,7 +37,6 @@
             <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=update-list"> ${bundle.getObject("putTheEstimate")}</a>
             <form action="${pageContext.request.contextPath}/servlet" method="post">
                 <input type="hidden" name="action" value="find-by-id-teacher">
-                <input type="hidden" name="directory" value="created-courses">
                 <input type="hidden" name="id-teacher" value="${user.getId()}">
                 <button type="submit">${bundle.getObject("viewСreatedСourses")}</button>
             </form>

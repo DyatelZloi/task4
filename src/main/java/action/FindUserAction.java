@@ -1,9 +1,7 @@
 package action;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import dao.ExceptionDao;
 import dao.GenericDao;
@@ -26,7 +24,7 @@ public class FindUserAction implements Strategy {
      * Find user by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin search a user");
         String directory = request.getParameter(DIRECTORY);
         String moveDirectory = "/WEB-INF/" + directory + ".jsp";
@@ -44,11 +42,6 @@ public class FindUserAction implements Strategy {
         }
         factoryDao.commit();
         log.info("Search user completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return moveDirectory;
     }
 }

@@ -30,7 +30,7 @@ public class UpdateUserAction implements Strategy {
      * Update a user by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin update a user");
         String directory = request.getParameter(DIRECTORY);
         String moveDirectory = "/WEB-INF/" + directory + ".jsp";
@@ -52,11 +52,6 @@ public class UpdateUserAction implements Strategy {
         }
         factoryDao.commit();
         log.info("User update completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return moveDirectory;
     }
 }

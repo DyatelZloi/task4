@@ -28,16 +28,14 @@ public class UpdateUserAction2 implements Strategy {
     public static final String USER_EMAIL = "email";
     public static final String USER_NAME = "name";
     public static final String USER_SURNAME = "surname";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/update-user.jsp";
 
     /**
      * Update a user by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin update a user");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int id = Integer.parseInt(request.getParameter(ID));
         String login = request.getParameter(USER_LOGIN);
         String password = request.getParameter(USER_PASSWORD);
@@ -66,11 +64,6 @@ public class UpdateUserAction2 implements Strategy {
         }
         factoryDao.commit();
         log.info("User update completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

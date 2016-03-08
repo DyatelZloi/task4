@@ -27,7 +27,7 @@ public class DeleteSheetListAction implements Strategy {
      * Delete a sheet list by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response){
+    public String execute(HttpServletRequest request, HttpServletResponse response){
         log.info("Begin to delete a sheet registration");
         String directory = request.getParameter(DIRECTORY);
         String moveDirectory = "/WEB-INF/" + directory + ".jsp";
@@ -45,11 +45,6 @@ public class DeleteSheetListAction implements Strategy {
         }
         factoryDao.commit();
         log.info("Delete sheet list completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return moveDirectory;
     }
 }

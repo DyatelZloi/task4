@@ -81,7 +81,7 @@ public class Action {
      * @throws ServletException
      * @throws IOException
      */
-    public void executeStrategy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        strategy.execute(request, response);
+    public String executeStrategy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        return strategy.execute(request, response);
     }
 }

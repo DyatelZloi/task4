@@ -21,16 +21,14 @@ public class UpdateSheetListAction implements Strategy {
     private static final String SCORE = "score";
     private static final String SHORT_COMMENT = "short-comment";
     private static final String ID = "id";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/index.jsp";
 
     /**
      * Update a sheet list by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin update a sheet list");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int score = Integer.parseInt(request.getParameter(SCORE));
         String shortComment = request.getParameter(SHORT_COMMENT);
         int id = Integer.parseInt(request.getParameter(ID));
@@ -49,11 +47,6 @@ public class UpdateSheetListAction implements Strategy {
             factoryDao.rollback();
         }
         factoryDao.commit();
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

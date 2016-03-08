@@ -30,13 +30,11 @@
                     <td colspan="4">
                         <form action="${pageContext.request.contextPath}/servlet" method="post">
                             <input type="hidden" name="action" value="delete-user">
-                            <input type="hidden" name="directory" value="index">
                             <input type="hidden" name="id" value="${user.getId()}">
                             <button type="submit"> ${bundle.getObject("deleteUser")} </button>
                         </form>
                         <form action="${pageContext.request.contextPath}/servlet" method="post">
                             <input type="hidden" name="action" value="delete-user">
-                            <input type="hidden" name="directory" value="index">
                             <input type="hidden" name="id" value="${user.getId()}">
                             <button type="submit"> Редактировать пользователя </button>
                         </form>

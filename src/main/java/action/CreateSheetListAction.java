@@ -23,16 +23,14 @@ public class CreateSheetListAction implements Strategy {
 
     private static final String STUDENT_ID = "id-student";
     private static final String COURSE_ID = "id-course";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/index.jsp";
 
     /**
      * Create a new sheet list
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin to create a new sheet registration");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int idStudent = Integer.parseInt(request.getParameter(STUDENT_ID));
         int idCourse = Integer.parseInt(request.getParameter(COURSE_ID));
         SheetList sheetList = new SheetList();
@@ -51,11 +49,6 @@ public class CreateSheetListAction implements Strategy {
         }
         factoryDao.commit();
         log.info("Create sheer list completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

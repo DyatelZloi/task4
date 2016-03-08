@@ -6,7 +6,6 @@
     <body>
         <form action="${pageContext.request.contextPath}/servlet" method="post">
             <input type="hidden" name="action" value="update-user-2">
-            <input type="hidden" name="directory" value="update-user">
             <input type="text" name="id" id="id" placeholder="id" value="${user.getId()}">
             <input type="text" name="login" id="login" placeholder="${bundle.getObject("userLogin")}" value="${user.getLogin()}">
             <input type="password" name="password" id="password" placeholder="${bundle.getObject("userPassword")}" value="${user.getPassword()}">

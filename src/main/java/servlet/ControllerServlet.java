@@ -40,10 +40,11 @@ public class ControllerServlet extends HttpServlet {
             throw new ExceptionServlet(e);
         }
         try {
-            context.executeStrategy(request,response);
+            request.getRequestDispatcher(context.executeStrategy(request,response)).forward(request, response);
         } catch (ServletException | IOException e) {
-            log.error("Error executing action");
+            log.error("Error when redirecting");
             throw new ExceptionServlet(e);
         }
+
     }
 }

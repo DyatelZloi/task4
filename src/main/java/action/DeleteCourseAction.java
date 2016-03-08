@@ -21,16 +21,14 @@ public class DeleteCourseAction implements Strategy {
     private static final Logger log = LoggerFactory.getLogger(DeleteCourseAction.class);
 
     private static final String ID = "id";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/index.jsp";
 
     /**
      * Delete a course by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response){
+    public String execute(HttpServletRequest request, HttpServletResponse response){
         log.info("Begin to delete a course");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         int id = Integer.parseInt(request.getParameter(ID));
         log.debug("Fields are filled");
         FactoryDao factoryDao = FactoryDao.getInstance();
@@ -45,11 +43,6 @@ public class DeleteCourseAction implements Strategy {
         }
         factoryDao.commit();
         log.info("Delete a course completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

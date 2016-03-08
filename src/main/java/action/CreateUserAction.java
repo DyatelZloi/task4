@@ -26,16 +26,14 @@ public class CreateUserAction implements Strategy {
 
     private static final String USER_LOGIN = "login";
     private static final String USER_PASSWORD = "password";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/index.jsp";
 
     /**
      * Create a new user
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin to create a new user");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         String login = request.getParameter(USER_LOGIN);
         String password= request.getParameter(USER_PASSWORD);
         User user = new User();
@@ -54,11 +52,6 @@ public class CreateUserAction implements Strategy {
         }
         factoryDao.commit();
         log.info("Create user completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

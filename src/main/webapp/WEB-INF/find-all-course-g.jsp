@@ -32,7 +32,6 @@
                         <td colspan = "3">
                             <form action="${pageContext.request.contextPath}/servlet" method="post">
                                 <input type="hidden" name="action" value="create-list">
-                                <input type="hidden" name="directory" value="index">
                                 <input type="hidden" name="id-student" value="${user.getId()}">
                                 <input type="hidden" name="id-course" value="${course.getId()}">
                                 <button type="submit">${bundle.getObject("register")}</button>

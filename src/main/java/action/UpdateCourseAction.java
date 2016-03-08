@@ -24,16 +24,14 @@ public class UpdateCourseAction implements Strategy {
     private static final String NAME_PARAMETER_NAME = "name";
     private static final String COURSE_DESCRIPTION_PARAMETER_NAME = "course-description";
     private static final String ID = "id";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/index.jsp";
 
     /**
      * Update a course by id
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin update a course");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String courseDescription = request.getParameter(COURSE_DESCRIPTION_PARAMETER_NAME);
         int id = Integer.parseInt(request.getParameter(ID));
@@ -52,12 +50,6 @@ public class UpdateCourseAction implements Strategy {
             factoryDao.rollback();
         }
         factoryDao.commit();
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
-
+        return DIRECTORY;
     }
 }

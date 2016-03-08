@@ -28,16 +28,14 @@ public class CreateCourseAction implements Strategy {
     private static final String NAME_PARAMETER_NAME = "name";
     private static final String COURSE_DESCRIPTION_PARAMETER_NAME = "course-description";
     private static final String TEACHER_ID = "teacher-id";
-    private static final String DIRECTORY = "directory";
+    private static final String DIRECTORY = "/WEB-INF/index.jsp";
 
     /**
      * Create a new course
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin to create a new course");
-        String directory = request.getParameter(DIRECTORY);
-        String moveDirectory = "/WEB-INF/" + directory + ".jsp";
         String name = request.getParameter(NAME_PARAMETER_NAME);
         String courseDescription = request.getParameter(COURSE_DESCRIPTION_PARAMETER_NAME);
         int teacherId = Integer.parseInt(request.getParameter(TEACHER_ID));
@@ -59,11 +57,6 @@ public class CreateCourseAction implements Strategy {
         }
         factoryDao.commit();
         log.info("Course construction completed");
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return DIRECTORY;
     }
 }

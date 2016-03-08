@@ -21,11 +21,11 @@
                 </c:if>
                 <c:if test = "${user.getLogin() != null}">
                     <a href="${pageContext.request.contextPath}/servlet?action=move-to&directory=user-home">${bundle.getObject("userHome")}</a>
-                    <a href="${pageContext.request.contextPath}/servlet?action=log-out&directory=index">${bundle.getObject("logOut")}</a>
+                    <a href="${pageContext.request.contextPath}/servlet?action=log-out">${bundle.getObject("logOut")}</a>
                 </c:if>
             </div>
             <div class = "btn">
-                <a href="${pageContext.request.contextPath}/servlet?action=find-all-courses&directory=find-all-course-g">${bundle.getObject("viewAvailableCourses")}</a>
+                <a href="${pageContext.request.contextPath}/servlet?action=find-all-courses">${bundle.getObject("viewAvailableCourses")}</a>
             </div>
         </div>
     </body>

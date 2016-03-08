@@ -26,7 +26,7 @@ public class FindAllSheetListAction implements Strategy {
      * Find all registered students
      */
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         log.info("Begin search all sheets registrations");
         String directory = request.getParameter(DIRECTORY);
         String moveDirectory = "/WEB-INF/" + directory + ".jsp";
@@ -45,11 +45,6 @@ public class FindAllSheetListAction implements Strategy {
         factoryDao.commit();
         log.info("Search all sheets registrations completed");
         request.setAttribute("createdcourses", list);
-        try {
-            request.getRequestDispatcher(moveDirectory).forward(request, response);
-        } catch (ServletException | IOException e) {
-            log.error("Error when redirecting");
-            throw new ExceptionAction(e);
-        }
+        return moveDirectory;
     }
 }
