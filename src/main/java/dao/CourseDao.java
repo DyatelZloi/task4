@@ -1,9 +1,7 @@
 package dao;
 
 import connection.PooledConnection;
-import dao.ExceptionDao;
 import entity.OptionalCourse;
-import entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

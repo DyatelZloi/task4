@@ -45,5 +45,4 @@ public class FindAllByCourseId implements Strategy{
         request.setAttribute("liststudents", list);
         return DIRECTORY;
     }
-
 }

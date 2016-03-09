@@ -8,7 +8,7 @@ import entity.User;
  * Created by DiZi on 09.01.2016.
  */
 public class Validator {
-
+    //TODO проверка на валидность
     public  boolean isValid (User user){
         return false;
     }
